@@ -20,7 +20,6 @@
   let previousProgress = -1;
   let previousStep = -1;
   let gesture;
-  let suppressClick = false;
 
   const clamp = (value, max = 1) => Math.max(0, Math.min(value, max));
   const isPager = () => route.hasAttribute('data-journey-pager');
@@ -151,6 +150,10 @@
     link.addEventListener('keydown', (event) => {
       if (!isEnhanced()) return;
       const directions = { ArrowLeft: index - 1, ArrowRight: index + 1, Home: 0, End: lastStep };
+      if (isPager()) {
+        directions.ArrowUp = index - 1;
+        directions.ArrowDown = index + 1;
+      }
       const target = directions[event.key];
       if (target === undefined) return;
       event.preventDefault();
@@ -163,30 +166,55 @@
   back.addEventListener('click', () => showPage(previousStep - 1));
   next.addEventListener('click', () => showPage(previousStep + 1));
 
-  cardFrame.addEventListener('pointerdown', (event) => {
-    suppressClick = false;
-    gesture = isPager() && event.isPrimary && event.pointerType !== 'mouse'
-      ? { id: event.pointerId, x: event.clientX, y: event.clientY }
-      : undefined;
-  });
+  function clearGesture() { gesture = undefined; }
 
-  cardFrame.addEventListener('pointercancel', () => { gesture = undefined; });
-  cardFrame.addEventListener('pointerup', (event) => {
-    if (!gesture || gesture.id !== event.pointerId || !isPager()) return;
-    const x = event.clientX - gesture.x;
-    const y = event.clientY - gesture.y;
-    gesture = undefined;
-    if (Math.abs(x) < 44 || Math.abs(x) < Math.abs(y) * 1.25) return;
-    suppressClick = true;
-    showPage(previousStep - Math.sign(x));
-  });
+  cardFrame.addEventListener('touchstart', (event) => {
+    clearGesture();
+    if (!isPager() || event.touches.length !== 1 || window.visualViewport?.scale > 1.02) return;
+    // The text and controls remain ordinary page-scrolling surfaces.
+    if (!event.target.closest?.('.kr-journey__media')) return;
+    const touch = event.touches[0];
+    gesture = { id: touch.identifier, x: touch.clientX, y: touch.clientY, step: previousStep, direction: 0 };
+  }, { passive: true });
 
-  cardFrame.addEventListener('click', (event) => {
-    if (!suppressClick || event.detail === 0) return;
-    suppressClick = false;
+  cardFrame.addEventListener('touchmove', (event) => {
+    if (!gesture) return;
+    const touch = event.touches[0];
+    if (!isPager() || event.touches.length !== 1 || touch.identifier !== gesture.id
+      || previousStep !== gesture.step || !event.cancelable || window.visualViewport?.scale > 1.02) {
+      clearGesture();
+      return;
+    }
+
+    if (!gesture.direction) {
+      const dx = touch.clientX - gesture.x;
+      const dy = gesture.y - touch.clientY;
+      if (Math.max(Math.abs(dx), Math.abs(dy)) < 7) return;
+      const direction = Math.sign(dy);
+      const dest = gesture.step + direction;
+      if (Math.abs(dy) < Math.abs(dx) * 1.25 || dest < 0 || dest > lastStep) {
+        clearGesture();
+        return;
+      }
+      gesture.direction = direction;
+    }
     event.preventDefault();
-    event.stopPropagation();
-  }, true);
+  }, { passive: false });
+
+  cardFrame.addEventListener('touchend', (event) => {
+    const swipe = gesture;
+    clearGesture();
+    if (!swipe?.direction || event.touches.length || !isPager() || previousStep !== swipe.step) return;
+    const touch = Array.from(event.changedTouches).find((point) => point.identifier === swipe.id);
+    if (touch && (swipe.y - touch.clientY) * swipe.direction >= 44) {
+      showPage(swipe.step + swipe.direction);
+    }
+  }, { passive: true });
+
+  cardFrame.addEventListener('touchcancel', clearGesture, { passive: true });
+  document.addEventListener('touchstart', (event) => {
+    if (event.touches.length > 1) clearGesture();
+  }, { passive: true });
 
   window.addEventListener('scroll', schedule, { passive: true });
   window.addEventListener('resize', measure, { passive: true });

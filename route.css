@@ -356,7 +356,6 @@
 .kr-journey[data-journey-pager] .kr-journey__frame {
   overflow: clip;
   margin-inline: -.5rem;
-  touch-action: pan-y pinch-zoom;
 }
 
 .kr-journey[data-journey-pager] .kr-journey__track {
@@ -371,11 +370,11 @@
 
 .kr-journey[data-journey-pager] .kr-journey__panel { flex: 0 0 100%; padding: .2rem .5rem .5rem; }
 .kr-journey[data-journey-pager] .kr-journey__card { grid-template-rows: auto 1fr; padding: .6rem; }
-.kr-journey[data-journey-pager] .kr-journey__media { aspect-ratio: 4 / 3; max-height: 31rem; }
+.kr-journey[data-journey-pager] .kr-journey__media {
+  aspect-ratio: 4 / 3;
+  max-height: 31rem;
+  max-height: min(31rem, 58svh);
+}
 .kr-journey[data-journey-pager] .kr-journey__media img { min-height: 0; max-height: none; }
 .kr-journey[data-journey-pager] .kr-journey__copy { align-self: start; padding: .65rem .2rem .3rem; }
 .kr-journey[data-journey-pager] .kr-journey__copy > p:not(.kr-journey__index) { max-width: 46ch; }
-
-@media (orientation: landscape) and (max-height: 32rem) {
-  .kr-journey[data-journey-pager] .kr-journey__media { max-height: 62svh; }
-}
