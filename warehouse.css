@@ -1,0 +1,53 @@
+.warehouse { background: var(--yellow); border-block: 2px solid var(--ink); }
+.warehouse-inner { padding-block: clamp(3.2rem, 7vw, 6.25rem); }
+.warehouse-heading { display: grid; grid-template-columns: 1fr minmax(14rem, 25rem); align-items: end; gap: 1.25rem; margin-bottom: clamp(1.6rem, 4.6vw, 3.1rem); }
+.warehouse-heading p { max-width: 33ch; padding-bottom: .2rem; font-size: clamp(.98rem, 1.5vw, 1.18rem); font-weight: 680; }
+.warehouse-heading h2 { margin-top: .85rem; font: 900 clamp(2.7rem, 7.9vw, 7.5rem)/.86 var(--display); font-stretch: 85%; letter-spacing: -.06em; }
+.warehouse-heading h2 span { color: var(--blue); }
+.warehouse-label { display: inline-flex; gap: .52em; align-items: center; transform: rotate(-4deg); background: var(--paper); padding: .25em .62em; font-size: .82rem; font-weight: 900; border: 1.5px solid var(--ink); box-shadow: 2px 2px var(--ink); text-decoration: none; }
+.warehouse-label:hover { background: var(--lilac); }
+.warehouse-layout { display: grid; grid-template-columns: 1fr; align-items: center; gap: clamp(1.15rem, 4vw, 3.15rem); }
+.warehouse-desk { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.warehouse[data-enhanced] .warehouse-layout { grid-template-columns: minmax(0, 1fr) minmax(14rem, 22rem); }
+.warehouse[data-enhanced] .warehouse-desk { grid-template-columns: minmax(0, 1fr); }
+.warehouse-photo {
+  min-width: 0;
+  margin: 0;
+  padding: .65rem .65rem .1rem;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  box-shadow: 4px 5px var(--ink);
+}
+.warehouse[data-enhanced] .warehouse-photo { transform: rotate(-1.1deg); animation: warehouse-frame .24s cubic-bezier(.2,.74,.28,1) both; }
+.warehouse-photo img { width: 100%; height: auto; aspect-ratio: 1; border: 1px solid var(--ink); object-fit: cover; }
+.warehouse[data-enhanced] .warehouse-photo img { aspect-ratio: 1.9; object-position: center 48%; }
+.warehouse[data-enhanced] .warehouse-photo[data-warehouse-panel='ansicht'] img { object-fit: contain; background: #cbc0aa; }
+.warehouse-photo figcaption { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: .2rem .7rem; padding: .64rem .25rem; }
+.warehouse-photo strong { font-weight: 900; }
+.warehouse-photo figcaption span { max-width: 49ch; font-size: .83rem; }
+.warehouse-choices { display: grid; gap: .53rem; }
+.warehouse-choices button {
+  display: grid; grid-template-columns: 3.15rem 1fr auto; align-items: center; gap: .67rem;
+  border: 1.5px solid var(--ink); padding: .38rem .62rem .38rem .38rem;
+  background: var(--paper); box-shadow: 2px 2px var(--ink); text-align: left;
+  font-size: clamp(.91rem,1.35vw,1.08rem); font-weight: 850;
+}
+.warehouse-choices button img { width: 3.15rem; height: 3.15rem; object-fit: cover; }
+.warehouse-choices button b { font-size: 1.28em; }
+.warehouse-choices button:hover { background: var(--lilac); }
+.warehouse-choices button[aria-pressed='true'] { background: var(--blue); color: var(--paper); }
+.warehouse-example { font-size: .74rem; padding-top: .3rem; }
+@keyframes warehouse-frame { from { opacity: .6; transform: translateY(5px) rotate(.9deg); } to { opacity: 1; transform: rotate(-1.1deg); } }
+@media (max-width: 760px) {
+  .warehouse-heading, .warehouse[data-enhanced] .warehouse-layout { grid-template-columns: 1fr; }
+  .warehouse-desk { grid-template-columns: 1fr; }
+  .warehouse[data-enhanced] .warehouse-photo img { aspect-ratio: 1.45; }
+  .warehouse-choices { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .warehouse-choices button { grid-template-columns: minmax(0, 1fr); gap: .28rem; padding: .28rem; align-content: start; font-size: .68rem; }
+  .warehouse-choices button img { width: 100%; height: auto; aspect-ratio: 1.7; }
+  .warehouse-choices button b { display: none; }
+  .warehouse-example { grid-column: 1 / -1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .warehouse[data-enhanced] .warehouse-photo { animation: none; }
+}

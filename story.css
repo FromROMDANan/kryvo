@@ -1,0 +1,69 @@
+.kr-scr-stickers { background: var(--lilac); border-block: 2px solid var(--ink); }
+.kr-scr-stickers__inner {
+  display: grid;
+  grid-template-columns: minmax(15rem, .85fr) minmax(0, 1.15fr);
+  align-items: center;
+  max-width: 100rem;
+  gap: clamp(2rem, 5vw, 5rem);
+  margin-inline: auto;
+  padding: clamp(4.5rem, 8vw, 8rem) max(var(--edge), 4vw);
+}
+.kr-scr-stickers h2 {
+  font: 900 clamp(3.1rem, 7vw, 7.7rem)/.88 var(--display);
+  font-stretch: 85%;
+  letter-spacing: -.055em;
+}
+.kr-scr-stickers h2 span { color: var(--blue); }
+.kr-scr-stickers__intro p { max-width: 27ch; margin-block: 1.3rem 1.5rem; font-weight: 650; }
+.kr-scr-stickers__link {
+  display: inline-flex; align-items: center; gap: .7rem;
+  color: var(--ink); background: var(--yellow);
+  padding: .7rem .95rem; border: 2px solid var(--ink);
+  box-shadow: 3px 3px 0 var(--ink); text-decoration: none;
+  font-weight: 900; transform: rotate(-3deg);
+}
+.kr-scr-stickers__link:hover, .kr-scr-stickers__link:focus-visible { transform: rotate(0); box-shadow: 2px 2px 0 var(--ink); }
+.kr-scr-stickers__wall {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.8rem, 4vw, 3rem) clamp(.85rem, 2vw, 2rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.kr-scr-stickers__item {
+  position: relative; align-self: center;
+  aspect-ratio: 1 / 1.06;
+  border: .45rem solid var(--paper);
+  outline: 1px solid var(--ink);
+  border-radius: 8% 6% 8% 4%;
+  background: var(--sticker-paper);
+  box-shadow: .2rem .32rem 0 var(--ink);
+  transform: translate(var(--sticker-x, 0px), var(--sticker-y, 0px)) rotate(var(--sticker-turn, var(--rotation))) scale(var(--sticker-scale, 1));
+}
+.kr-scr-stickers__item img { width: 100%; height: 100%; object-fit: cover; border-radius: 3%; }
+.kr-scr-stickers__item--mascot img { object-fit: contain; }
+.kr-scr-stickers__tape {
+  position: absolute; right: -.65rem; bottom: -.95rem;
+  background: var(--tape); padding: .42em .6em;
+  clip-path: polygon(0 4%, 98% 0, 96% 17%, 100% 35%, 96% 50%, 100% 72%, 97% 100%, 2% 96%, 4% 84%, 0 70%, 3% 56%, 0 42%, 4% 24%);
+  font: 900 clamp(.72rem, 1.4vw, 1.1rem)/1.15 var(--display);
+  transform: rotate(-5deg);
+}
+.kr-scr-stickers__item:nth-child(even) .kr-scr-stickers__tape { right: auto; left: -.6rem; transform: rotate(5deg); }
+@media (min-width: 900px) and (min-height: 680px) and (prefers-reduced-motion: no-preference) {
+  .kr-scr-stickers { position: relative; height: 161svh; }
+  .kr-scr-stickers__inner {
+    position: sticky; top: 74px; min-height: calc(100svh - 74px);
+    padding-block: 2.4rem;
+  }
+  .kr-scr-stickers__wall { width: 100%; max-width: min(100%, 84svh); margin-inline: auto; }
+}
+@media (max-width: 860px) {
+  .kr-scr-stickers__inner { grid-template-columns: minmax(0, 1fr); }
+  .kr-scr-stickers__wall { margin: .5rem .4rem .8rem; }
+}
+@media (max-width: 520px) {
+  .kr-scr-stickers__wall { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.7rem 1rem; }
+}

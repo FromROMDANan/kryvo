@@ -1,0 +1,691 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f0e5">
+  <meta name="description" content="Interaktives Shop-Konzept für Designer-Vintage aus China. Verfolge den Lieferweg bis nach Deutschland und stelle deinen eigenen Look zusammen.">
+  <title>KRYVO — Designer-Vintage aus China</title>
+  <link rel="icon" href="assets/favicon.png" type="image/png">
+  <link rel="stylesheet" href="assets/fonts.css">
+  <link rel="stylesheet" href="site.css">
+  <link rel="stylesheet" href="route.css">
+  <link rel="stylesheet" href="warehouse.css">
+  <link rel="stylesheet" href="tracking.css">
+  <link rel="stylesheet" href="styling.css">
+  <link rel="stylesheet" href="story.css">
+  <link rel="stylesheet" href="commerce.css">
+  <link rel="stylesheet" href="catalog.css">
+  <link rel="stylesheet" href="product.css">
+  <script defer src="shop.js"></script>
+  <script defer src="route.js"></script>
+  <script defer src="warehouse.js"></script>
+  <script defer src="tracking.js"></script>
+  <script defer src="styling.js"></script>
+  <script defer src="story.js"></script>
+  <script defer src="product.js"></script>
+</head>
+<body>
+  <a href="#main" class="skip-link">Zum Inhalt</a>
+  <header class="header">
+    <div class="header-inner">
+      <a href="#top" class="brand" aria-label="KRYVO, zur Startseite">KRY<span class="brand-v">V</span>O<span class="brand-dot">.</span></a>
+      <nav aria-label="Hauptnavigation" class="primary-nav">
+        <a href="#route">Lieferweg</a>
+        <a href="#tracking">Tracking</a>
+        <a href="#styling">Styling</a>
+        <a href="#catalog">Shop</a>
+      </nav>
+      <button type="button" class="cart-toggle" data-cart-open>
+        <span class="bag-icon" aria-hidden="true"></span><span>Warenkorb</span><span class="cart-count" data-cart-count>0</span>
+      </button>
+    </div>
+  </header>
+  <main id="main">
+    <section class="hero" id="top" aria-labelledby="hero-heading">
+      <div class="hero-inner wrap">
+        <div class="hero-copy">
+          <p class="hero-note">Shop-Konzept aus China</p>
+          <h1 id="hero-heading">ARCHIV<br><span>ZUM TRAGEN.</span></h1>
+          <p class="hero-intro">Designer-Vintage von chinesischen Resale-Plattformen. Verwaschene Hoodies, schwerer Denim und Schnitte, die man auf der Straße erkennt.</p>
+          <a class="button button-orange" href="#route">Lieferweg ansehen <span aria-hidden="true">↓</span></a>
+          <a class="hero-catalog-link" href="#catalog">Zum Drop</a>
+          <a class="hero-route-ticket" href="#route"><span>China</span><b aria-hidden="true">→</b><span>Lagerfotos</span><b aria-hidden="true">→</b><span>Deutschland</span></a>
+        </div>
+        <div class="hero-art">
+          <span class="hero-spark" aria-hidden="true">✳</span>
+          <span class="hero-orbit" aria-hidden="true"></span>
+          <img class="hero-image" src="assets/hero.webp" width="1200" height="900" fetchpriority="high" alt="Vintage-Collage mit einem verwaschenen Hoodie, weitem Denim und einem weinroten Zip-Hoodie">
+          <img class="hero-mascot" src="assets/mascot.webp" width="360" height="360" alt="">
+          <a href="#styling" class="hero-stamp" aria-label="Styling ansehen"><span>SO</span><b>↗</b><span>STYLST DU’S</span></a>
+        </div>
+      </div>
+    </section>
+
+    <nav class="chapter-band" aria-label="Kapitel">
+      <ol class="wrap chapter-band-inner">
+        <li><a href="#route"><span>01</span> Lieferweg</a></li>
+        <li><a href="#styling"><span>02</span> Styling</a></li>
+        <li><a href="#catalog"><span>03</span> Der Drop</a></li>
+      </ol>
+    </nav>
+
+    <section class="kr-journey" id="route" aria-labelledby="journey-title">
+  <div class="kr-journey__stage">
+    <header class="kr-journey__heading">
+      <h2 id="journey-title">Von China <span>bis zu dir<span class="kr-journey__dot">.</span></span></h2>
+      <p>Acht Stationen vom ersten Wunsch bis zu deiner Haustür.</p>
+    </header>
+    <nav aria-label="Stationen des Lieferwegs" class="kr-journey__nav">
+      <div class="kr-journey__leg">
+        <span class="kr-journey__place">China</span>
+        <ol class="kr-journey__steps">
+          <li><a href="#route-wunsch" data-journey-step="0"><span>01</span><strong>Wunsch</strong></a></li>
+          <li><a href="#route-fund" data-journey-step="1"><span>02</span><strong>Bestellung</strong></a></li>
+          <li><a href="#route-lager" data-journey-step="2"><span>03</span><strong>Lager</strong></a></li>
+          <li><a href="#route-fotos" data-journey-step="3"><span>04</span><strong>Fotos</strong></a></li>
+        </ol>
+      </div>
+      <span class="kr-journey__handoff" aria-hidden="true">➜</span>
+      <div class="kr-journey__leg">
+        <span class="kr-journey__place">Deutschland</span>
+        <ol class="kr-journey__steps" start="5">
+          <li><a href="#route-versand" data-journey-step="4"><span>05</span><strong>Transport</strong></a></li>
+          <li><a href="#route-deutschland" data-journey-step="5"><span>06</span><strong>Ankunft</strong></a></li>
+          <li><a href="#route-kauf" data-journey-step="6"><span>07</span><strong>Kaufwunsch</strong></a></li>
+          <li><a href="#route-zustellung" data-journey-step="7"><span>08</span><strong>Zustellung</strong></a></li>
+        </ol>
+      </div>
+    </nav>
+    <div class="kr-journey__frame">
+      <ol class="kr-journey__track">
+        <li class="kr-journey__panel" id="route-wunsch" style="--chapter-paper:#ffe06b;--chapter-tilt:-7deg">
+          <article class="kr-journey__card">
+            <div class="kr-journey__media">
+              <img src="assets/route-wish.webp" alt="Ein Handy neben einer Skizze und einem Foto eines Kleidungsstücks" loading="lazy" decoding="async">
+              <span class="kr-journey__tape" aria-hidden="true">DEIN WUNSCH</span>
+            </div>
+            <div class="kr-journey__copy">
+              <p class="kr-journey__index" aria-hidden="true">01 / 08</p>
+              <h3>Wunsch schicken</h3>
+              <p>Du sagst uns, welches Vintage-Stück du suchst. Marke, Modell, Größe oder ein Foto helfen uns, deinen Wunsch einzugrenzen.</p>
+            </div>
+          </article>
+        </li>
+        <li class="kr-journey__panel" id="route-fund" style="--chapter-paper:#ccc0ff;--chapter-tilt:6deg">
+          <article class="kr-journey__card">
+            <div class="kr-journey__media">
+              <img src="assets/route-find.webp" alt="Vintagekleidung auf einem Markt in China" loading="lazy" decoding="async">
+              <span class="kr-journey__tape" aria-hidden="true">BESTELLT IN CHINA</span>
+            </div>
+            <div class="kr-journey__copy">
+              <p class="kr-journey__index" aria-hidden="true">02 / 08</p>
+              <h3>Wir bestellen in China</h3>
+              <p>Wenn wir ein passendes Stück finden, bestellen wir es beim Anbieter vor Ort. Der Anbieter schickt es zuerst ins Lager in China.</p>
+            </div>
+          </article>
+        </li>
+        <li class="kr-journey__panel" id="route-lager" style="--chapter-paper:#ff633b;--chapter-tilt:-5deg">
+          <article class="kr-journey__card">
+            <div class="kr-journey__media">
+              <img src="assets/route-warehouse.webp" alt="Eingangspakete mit Vintagekleidung auf einem Arbeitstisch im Lager" loading="lazy" decoding="async">
+              <span class="kr-journey__tape" aria-hidden="true">LAGER IN CHINA</span>
+            </div>
+            <div class="kr-journey__copy">
+              <p class="kr-journey__index" aria-hidden="true">03 / 08</p>
+              <h3>Ankunft im Lager in China</h3>
+              <p>Das Team im Lager öffnet das Paket, ordnet das Kleidungsstück deinem Wunsch zu und bereitet es für die Fotos vor.</p>
+            </div>
+          </article>
+        </li>
+        <li class="kr-journey__panel" id="route-fotos" style="--chapter-paper:#ffe06b;--chapter-tilt:7deg">
+          <article class="kr-journey__card">
+            <div class="kr-journey__media">
+              <img src="assets/route-pack.webp" alt="Vintagekleidung zur Aufnahme von Detailfotos auf einem Tisch im Lager" loading="lazy" decoding="async">
+              <span class="kr-journey__tape" aria-hidden="true">FOTOS IM LAGER</span>
+            </div>
+            <div class="kr-journey__copy">
+              <p class="kr-journey__index" aria-hidden="true">04 / 08</p>
+              <h3>Fotos im Lager</h3>
+              <p>Das Lagerteam fotografiert Etikett, Nähte und sichtbare Gebrauchsspuren. So kannst du dir den Zustand in Ruhe ansehen.</p>
+              <a class="kr-journey__photos-link" href="#lagerfotos">Lagerfotos ansehen <span aria-hidden="true">↘</span></a>
+            </div>
+          </article>
+        </li>
+        <li class="kr-journey__panel" id="route-versand" style="--chapter-paper:#ff633b;--chapter-tilt:-6deg">
+          <article class="kr-journey__card">
+            <div class="kr-journey__media">
+              <img src="assets/route-fly.webp" alt="Versandkartons auf dem Weg zum Frachttransport" loading="lazy" decoding="async">
+              <span class="kr-journey__tape" aria-hidden="true">CHINA → DEUTSCHLAND</span>
+            </div>
+            <div class="kr-journey__copy">
+              <p class="kr-journey__index" aria-hidden="true">05 / 08</p>
+              <h3>Paket nach Deutschland</h3>
+              <p>Nach den Fotos verpackt das Lagerteam das Stück für den Weitertransport. Der Versanddienst bringt das Paket nach Deutschland.</p>
+            </div>
+          </article>
+        </li>
+        <li class="kr-journey__panel" id="route-deutschland" style="--chapter-paper:#ccc0ff;--chapter-tilt:6deg">
+          <article class="kr-journey__card">
+            <div class="kr-journey__media">
+              <img src="assets/route-germany.webp" alt="Ein angekommenes Paket auf einem Arbeitstisch in Deutschland" loading="lazy" decoding="async">
+              <span class="kr-journey__tape" aria-hidden="true">IN DEUTSCHLAND</span>
+            </div>
+            <div class="kr-journey__copy">
+              <p class="kr-journey__index" aria-hidden="true">06 / 08</p>
+              <h3>Bei uns in Deutschland</h3>
+              <p>Das Paket kommt bei uns an. Wir legen das Kleidungsstück für die letzte Etappe zurück und besprechen mit dir, ob du es kaufen möchtest.</p>
+            </div>
+          </article>
+        </li>
+        <li class="kr-journey__panel" id="route-kauf" style="--chapter-paper:#ffe06b;--chapter-tilt:-5deg">
+          <article class="kr-journey__card">
+            <div class="kr-journey__media">
+              <img src="assets/route-message.webp" alt="Ein Handy neben einem gefalteten Kleidungsstück" loading="lazy" decoding="async">
+              <span class="kr-journey__tape" aria-hidden="true">NACHRICHT ODER ANRUF</span>
+            </div>
+            <div class="kr-journey__copy">
+              <p class="kr-journey__index" aria-hidden="true">07 / 08</p>
+              <h3>Kaufwunsch bestätigen</h3>
+              <p>Du bestätigst deinen Kaufwunsch per Nachricht oder Anruf. Dabei klären wir die Lieferadresse und die Angaben für den Versand.</p>
+              <a class="kr-journey__photos-link" href="#catalog">Stück im Shop wählen <span aria-hidden="true">↘</span></a>
+            </div>
+          </article>
+        </li>
+        <li class="kr-journey__panel" id="route-zustellung" style="--chapter-paper:#ff633b;--chapter-tilt:7deg">
+          <article class="kr-journey__card">
+            <div class="kr-journey__media">
+              <img src="assets/route-door.webp" alt="Ein Paket liegt vor einer Haustür" loading="lazy" decoding="async">
+              <span class="kr-journey__tape" aria-hidden="true">BEI DIR</span>
+            </div>
+            <div class="kr-journey__copy">
+              <p class="kr-journey__index" aria-hidden="true">08 / 08</p>
+              <h3>Wir schicken es dir</h3>
+              <p>Nach deiner Bestätigung schicken wir dein Stück von Deutschland aus an deine Lieferadresse. Der Paketdienst bringt es bis zu dir.</p>
+            </div>
+          </article>
+        </li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+    <section class="warehouse" id="lagerfotos" aria-labelledby="warehouse-heading" data-warehouse>
+  <div class="wrap warehouse-inner">
+    <header class="warehouse-heading">
+      <div>
+        <a class="warehouse-label" href="#route-fotos">Station 04 <span aria-hidden="true">↗</span></a>
+        <h2 id="warehouse-heading">FOTOS AUS<br>DEM LAGER<span>.</span></h2>
+      </div>
+      <p>Vor dem Versand nach Deutschland fotografieren wir das Stück im Lager in China. Schau dir an, was dabei festgehalten wird.</p>
+    </header>
+    <div class="warehouse-layout">
+      <div class="warehouse-desk">
+        <figure class="warehouse-photo" data-warehouse-panel="ansicht" id="lager-ansicht">
+          <img src="assets/qc-overview.webp" alt="Verwaschener schwarzer Hoodie auf dem Prüftisch, von oben fotografiert" width="650" height="650" loading="lazy" decoding="async">
+          <figcaption><strong>Gesamtansicht</strong><span>Schnitt, Farbe und sichtbare Spuren im Überblick.</span></figcaption>
+        </figure>
+        <figure class="warehouse-photo" data-warehouse-panel="naht" id="lager-naht">
+          <img src="assets/qc-seam.webp" alt="Nahaufnahme der Naht und des Bündchens am schwarzen Hoodie" width="650" height="650" loading="lazy" decoding="async">
+          <figcaption><strong>Naht und Bündchen</strong><span>Eine Nahaufnahme hält den Zustand der beanspruchten Stellen fest.</span></figcaption>
+        </figure>
+        <figure class="warehouse-photo" data-warehouse-panel="etikett" id="lager-etikett">
+          <img src="assets/qc-tag.webp" alt="Detailfoto eines weißen Stoffetiketts an der Innenseite des Hoodies" width="650" height="650" loading="lazy" decoding="async">
+          <figcaption><strong>Etikett und Innenseite</strong><span>Das Detailfoto ergänzt die Bilderserie für genau dieses Stück.</span></figcaption>
+        </figure>
+      </div>
+      <div class="warehouse-choices" aria-label="Lagerfotos auswählen" data-warehouse-choices hidden>
+        <button type="button" data-warehouse-tab="ansicht" aria-controls="lager-ansicht" aria-pressed="true"><img src="assets/qc-overview.webp" alt="" width="78" height="78" loading="lazy"><span>Gesamtansicht</span><b aria-hidden="true">↗</b></button>
+        <button type="button" data-warehouse-tab="naht" aria-controls="lager-naht" aria-pressed="false"><img src="assets/qc-seam.webp" alt="" width="78" height="78" loading="lazy"><span>Naht &amp; Bündchen</span><b aria-hidden="true">↗</b></button>
+        <button type="button" data-warehouse-tab="etikett" aria-controls="lager-etikett" aria-pressed="false"><img src="assets/qc-tag.webp" alt="" width="78" height="78" loading="lazy"><span>Etikett</span><b aria-hidden="true">↗</b></button>
+        <span class="warehouse-example">Beispielfotos eines Demo-Stücks.</span>
+      </div>
+    </div>
+  </div>
+</section>
+    <section class="kr-tracking" id="tracking" aria-labelledby="kr-tracking-title" data-tracking>
+  <div class="kr-tracking__inner wrap">
+    <header class="kr-tracking__intro">
+      <h2 id="kr-tracking-title">Wo ist <br>dein Drop<span>?</span></h2>
+      <p>Ruf den gespeicherten Stand deiner Anfrage oder Bestellung ab.</p>
+    </header>
+    <div class="kr-tracking__paper">
+      <form class="kr-tracking__form" data-tracking-form novalidate>
+        <label for="kr-tracking-number">KRYVO-Nummer</label>
+        <div class="kr-tracking__input-row">
+          <input id="kr-tracking-number" name="tracking" placeholder="KRYVO-…" maxlength="40" required autocomplete="off" autocapitalize="characters" spellcheck="false" aria-describedby="kr-tracking-help">
+          <button type="submit" class="kr-tracking__submit">Status prüfen <span aria-hidden="true">↗</span></button>
+        </div>
+        <p id="kr-tracking-help" class="kr-tracking__help">Verwende die Nummer deiner auf diesem Gerät gespeicherten Anfrage.</p>
+        <button type="button" class="kr-tracking__example" data-tracking-example>Beispiel ausprobieren <strong>KRYVO-DEMO</strong> <span aria-hidden="true">↘</span></button>
+        <p class="kr-tracking__message" data-tracking-message role="status" aria-atomic="true"></p>
+      </form>
+      <div class="kr-tracking__result" data-tracking-result aria-label="Sendungsverlauf" hidden>
+        <div class="kr-tracking__summary">
+          <div>
+            <p class="kr-tracking__reference" data-tracking-reference></p>
+            <h3 data-tracking-status></h3>
+          </div>
+          <p class="kr-tracking__note" data-tracking-note></p>
+        </div>
+        <ol class="kr-tracking__steps" aria-label="Etappen">
+          <li data-tracking-stage="received">
+            <span class="kr-tracking__step-title">Anfrage erfasst</span>
+            <time hidden></time>
+          </li>
+          <li data-tracking-stage="preparing">
+            <span class="kr-tracking__step-title">In Vorbereitung</span>
+            <time hidden></time>
+          </li>
+          <li data-tracking-stage="photographed">
+            <span class="kr-tracking__step-title">Im Lager fotografiert</span>
+            <time hidden></time>
+          </li>
+          <li data-tracking-stage="shipping">
+            <span class="kr-tracking__step-title">Unterwegs</span>
+            <time hidden></time>
+          </li>
+          <li data-tracking-stage="arrived">
+            <span class="kr-tracking__step-title">In Deutschland</span>
+            <time hidden></time>
+          </li>
+          <li data-tracking-stage="delivered">
+            <span class="kr-tracking__step-title">Zugestellt</span>
+            <time hidden></time>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+    <section id="styling" class="ks-styling" aria-labelledby="ks-styling-title" data-styling>
+  <header class="ks-styling__intro">
+    <h2 id="ks-styling-title">So trägst du<br>den Drop<span>.</span></h2>
+    <div class="ks-styling__entry">
+      <p>Drei Looks, drei Ideen für deine Garderobe. Entdecke die Details direkt am Outfit.</p>
+      <button class="ks-builder-saved-entry" type="button" data-build-look="saved" aria-haspopup="dialog" hidden>Gespeicherte Looks <span aria-hidden="true">↗</span></button>
+    </div>
+  </header>
+
+  <div class="ks-styling__runway" data-styling-runway>
+    <div class="ks-styling__stage" data-styling-stage>
+      <ol class="ks-styling__looks">
+        <li class="ks-look" data-styling-look>
+          <figure class="ks-look__photo">
+            <img class="ks-look__fit" src="assets/look-layer.webp" alt="Styling mit schwarzem Hoodie und weiter Jeans" width="585" height="881" loading="lazy" decoding="async">
+            <div class="ks-look__detail" aria-hidden="true"><img src="assets/look-layer.webp" alt="" width="585" height="881" loading="lazy" decoding="async"><span class="ks-look__marker"></span></div>
+            <button type="button" class="ks-look__hotspot" data-styling-hotspot aria-expanded="false" aria-controls="ks-outfit-layer" hidden><span aria-hidden="true"></span>Saum zeigen</button>
+          </figure>
+          <div class="ks-look__note">
+            <span class="ks-look__number" aria-hidden="true">01</span>
+            <h3>Lagen bauen</h3>
+            <p>Unter dem schwarzen Hoodie darf ein längeres Shirt hervorblitzen. Der helle Saum trennt die dunklen Flächen zwischen Hoodie und weiter Jeans.</p>
+            <button class="ks-look__build" type="button" data-build-look="layer" aria-haspopup="dialog" hidden>Look zusammenstellen <span aria-hidden="true">↗</span></button>
+            <details class="ks-look__outfit" id="ks-outfit-layer" data-styling-outfit>
+              <summary><span class="ks-look__outfit-action">Outfit ansehen</span><span class="ks-look__outfit-close">Outfit schließen</span></summary>
+              <div class="ks-look__outfit-body">
+                <p><strong>Am Saum:</strong> Lass etwa zwei Fingerbreit vom Shirt sichtbar. Bei der Jeans darf der Saum leicht auf den Schuhen aufliegen.</p>
+                <ul class="ks-look__pieces" aria-label="Teile zum Look">
+                  <li><a href="#produkt-balenciaga">Washed Black Hoodie</a></li>
+                  <li><a href="#produkt-acne-denim">Loose Fit Jeans</a></li>
+                </ul>
+              </div>
+            </details>
+          </div>
+        </li>
+
+        <li class="ks-look" data-styling-look>
+          <figure class="ks-look__photo">
+            <img class="ks-look__fit" src="assets/look-shape.webp" alt="Styling mit kastig geschnittenem Anthrazitblazer und dunkler Cargohose" width="585" height="881" loading="lazy" decoding="async">
+            <div class="ks-look__detail" aria-hidden="true"><img src="assets/look-shape.webp" alt="" width="585" height="881" loading="lazy" decoding="async"><span class="ks-look__marker"></span></div>
+            <button type="button" class="ks-look__hotspot" data-styling-hotspot aria-expanded="false" aria-controls="ks-outfit-shape" hidden><span aria-hidden="true"></span>Klare Schulter</button>
+          </figure>
+          <div class="ks-look__note">
+            <span class="ks-look__number" aria-hidden="true">02</span>
+            <h3>Silhouette formen</h3>
+            <p>Die eckige Schulter des Blazers gibt der weiten Cargo Halt. Ein schlichtes Oberteil darunter lässt die Schnitte wirken.</p>
+            <button class="ks-look__build" type="button" data-build-look="shape" aria-haspopup="dialog" hidden>Look zusammenstellen <span aria-hidden="true">↗</span></button>
+            <details class="ks-look__outfit" id="ks-outfit-shape" data-styling-outfit>
+              <summary><span class="ks-look__outfit-action">Outfit ansehen</span><span class="ks-look__outfit-close">Outfit schließen</span></summary>
+              <div class="ks-look__outfit-body">
+                <p><strong>An der Taille:</strong> Trag den Blazer offen und steck das Shirt vorn in den Bund. So bleiben die Proportionen trotz weiter Schnitte sichtbar.</p>
+                <ul class="ks-look__pieces" aria-label="Teile zum Look">
+                  <li><a href="#produkt-jil-sander">Wollblazer</a></li>
+                  <li><a href="#produkt-gmbh">Cargo-Hose</a></li>
+                </ul>
+              </div>
+            </details>
+          </div>
+        </li>
+
+        <li class="ks-look" data-styling-look>
+          <figure class="ks-look__photo">
+            <img class="ks-look__fit" src="assets/look-accent.webp" alt="Styling mit bordeauxrotem Zip-Hoodie, Denim und Sneakern" width="585" height="881" loading="lazy" decoding="async">
+            <div class="ks-look__detail" aria-hidden="true"><img src="assets/look-accent.webp" alt="" width="585" height="881" loading="lazy" decoding="async"><span class="ks-look__marker"></span></div>
+            <button type="button" class="ks-look__hotspot" data-styling-hotspot aria-expanded="false" aria-controls="ks-outfit-accent" hidden><span aria-hidden="true"></span>Bordeaux</button>
+          </figure>
+          <div class="ks-look__note">
+            <span class="ks-look__number" aria-hidden="true">03</span>
+            <h3>Akzent setzen</h3>
+            <p>Der bordeauxrote Zip-Hoodie bringt die Farbe. Trag dazu dunklen Denim und schlichte Sneaker, damit der Rotton mehr Raum bekommt.</p>
+            <button class="ks-look__build" type="button" data-build-look="accent" aria-haspopup="dialog" hidden>Look zusammenstellen <span aria-hidden="true">↗</span></button>
+            <details class="ks-look__outfit" id="ks-outfit-accent" data-styling-outfit>
+              <summary><span class="ks-look__outfit-action">Outfit ansehen</span><span class="ks-look__outfit-close">Outfit schließen</span></summary>
+              <div class="ks-look__outfit-body">
+                <p><strong>Am Reißverschluss:</strong> Öffne den Zip ein Stück und greif den neutralen Ton des Shirts in den Sneakern wieder auf.</p>
+                <ul class="ks-look__pieces" aria-label="Teile zum Look">
+                  <li><a href="#produkt-vetements">Oxblood Zip-Hoodie</a></li>
+                  <li><a href="#produkt-acne-denim">Loose Fit Jeans</a></li>
+                </ul>
+              </div>
+            </details>
+          </div>
+        </li>
+      </ol>
+
+      <nav class="ks-styling__nav" aria-label="Look wählen" data-styling-nav hidden>
+        <button type="button" data-styling-jump="0" aria-label="Look 1: Lagen bauen" aria-current="step">01</button>
+        <button type="button" data-styling-jump="1" aria-label="Look 2: Silhouette formen">02</button>
+        <button type="button" data-styling-jump="2" aria-label="Look 3: Akzent setzen">03</button>
+      </nav>
+    </div>
+  </div>
+</section>
+    <section class="kr-scr-stickers" id="stickers" aria-labelledby="kr-sticker-title">
+  <div class="kr-scr-stickers__inner">
+    <header class="kr-scr-stickers__intro">
+      <h2 id="kr-sticker-title">STICKER<br>VOM DROP<span>.</span></h2>
+      <p>Sechs Motive aus dem Archiv, gesammelt von der KRYVO-Taube.</p>
+      <a class="kr-scr-stickers__link" href="#catalog">Zum Drop <span aria-hidden="true">↓</span></a>
+    </header>
+    <ul class="kr-scr-stickers__wall" aria-label="Sticker des ersten Drops">
+      <li class="kr-scr-stickers__item" style="--rotation:-10deg;--stack-turn:-20deg;--sticker-paper:#ff633b;--tape:#ffe06b">
+        <img src="assets/hoodie.webp" alt="Verwaschener schwarzer Hoodie" loading="lazy" decoding="async" width="640" height="640">
+        <span class="kr-scr-stickers__tape">Balenciaga</span>
+      </li>
+      <li class="kr-scr-stickers__item" style="--rotation:6deg;--stack-turn:21deg;--sticker-paper:#ffe06b;--tape:#ccc0ff">
+        <img src="assets/zip.webp" alt="Weinroter Zip-Hoodie" loading="lazy" decoding="async" width="640" height="640">
+        <span class="kr-scr-stickers__tape">Vetements</span>
+      </li>
+      <li class="kr-scr-stickers__item" style="--rotation:-4deg;--stack-turn:-29deg;--sticker-paper:#ccc0ff;--tape:#ffe06b">
+        <img src="assets/denim.webp" alt="Weite hellblaue Jeans" loading="lazy" decoding="async" width="640" height="640">
+        <span class="kr-scr-stickers__tape">Acne Studios</span>
+      </li>
+      <li class="kr-scr-stickers__item" style="--rotation:5deg;--stack-turn:25deg;--sticker-paper:#243dcf;--tape:#ff633b">
+        <img src="assets/blazer.webp" alt="Schwarzer Blazer mit breitem Revers" loading="lazy" decoding="async" width="640" height="640">
+        <span class="kr-scr-stickers__tape">Jil Sander</span>
+      </li>
+      <li class="kr-scr-stickers__item kr-scr-stickers__item--mascot" style="--rotation:-8deg;--stack-turn:-14deg;--sticker-paper:#ffe06b;--tape:#ccc0ff">
+        <img src="assets/mascot.webp" alt="KRYVO-Taube auf einem Skateboard" loading="lazy" decoding="async" width="640" height="640">
+        <span class="kr-scr-stickers__tape">KRYVO-Taube</span>
+      </li>
+      <li class="kr-scr-stickers__item" style="--rotation:9deg;--stack-turn:11deg;--sticker-paper:#ff633b;--tape:#ffe06b">
+        <img src="assets/hero.webp" alt="Collage aus dem Designer-Vintage-Archiv" loading="lazy" decoding="async" width="640" height="640">
+        <span class="kr-scr-stickers__tape">Archiv 01</span>
+      </li>
+    </ul>
+  </div>
+</section>
+    <section class="catalog wrap" id="catalog" aria-labelledby="catalog-heading">
+      <div class="catalog-heading">
+        <div><p class="section-label">Drop 01</p><h2 id="catalog-heading">AUS DEM ARCHIV.</h2></div>
+        <div class="filters" role="group" aria-label="Nach Marke filtern">
+          <button type="button" data-filter="all" aria-pressed="true">Alle</button>
+          <button type="button" data-filter="balenciaga" aria-pressed="false">Balenciaga</button>
+          <button type="button" data-filter="vetements" aria-pressed="false">Vetements</button>
+          <button type="button" data-filter="acne" aria-pressed="false">Acne Studios</button>
+          <button type="button" data-filter="jil-sander" aria-pressed="false">Jil Sander</button>
+          <button type="button" data-filter="gmbh" aria-pressed="false">GmbH</button>
+          <button type="button" data-filter="032c" aria-pressed="false">032c</button>
+          <button type="button" data-filter="akog" aria-pressed="false">A Kind of Guise</button>
+        </div>
+      </div>
+      <span class="visually-hidden" data-catalog-count aria-live="polite"></span>
+      <div class="products">
+        <article class="product product-hoodie" data-product="balenciaga" data-category="balenciaga" id="produkt-balenciaga" tabindex="-1">
+          <div class="product-photo">
+            <img src="assets/hoodie.webp" alt="Ausgewaschener, graphitfarbener Oversize-Hoodie" width="720" height="720" loading="lazy">
+            <span class="product-tape">Balenciaga</span>
+            <button class="product-detail-open" type="button" data-product-open="balenciaga" aria-label="Details zu Verwaschener schwarzer Hoodie" aria-haspopup="dialog">Details <span aria-hidden="true">↗</span></button>
+          </div>
+          <div class="product-body">
+            <h3>Verwaschener schwarzer Hoodie</h3>
+            <p>Ausgewaschene Baumwolle, überschnittene Schultern.</p>
+            <div class="product-buy"><strong>289,00 €</strong><button type="button" data-add="balenciaga" aria-label="Verwaschener schwarzer Hoodie in den Warenkorb legen"><span>In den Korb</span> <span aria-hidden="true">+</span></button></div>
+          </div>
+        </article>
+        <article class="product product-zip" data-product="vetements" data-category="vetements" id="produkt-vetements" tabindex="-1">
+          <div class="product-photo">
+            <img src="assets/zip.webp" alt="Dunkelroter Zip-Hoodie mit silbernem Reißverschluss" width="720" height="720" loading="lazy">
+            <span class="product-tape">Vetements</span>
+            <button class="product-detail-open" type="button" data-product-open="vetements" aria-label="Details zu Weinroter Zip-Hoodie" aria-haspopup="dialog">Details <span aria-hidden="true">↗</span></button>
+          </div>
+          <div class="product-body">
+            <h3>Weinroter Zip-Hoodie</h3>
+            <p>Dunkles Bordeaux, markanter Metallreißverschluss.</p>
+            <div class="product-buy"><strong>379,00 €</strong><button type="button" data-add="vetements" aria-label="Weinroter Zip-Hoodie in den Warenkorb legen"><span>In den Korb</span> <span aria-hidden="true">+</span></button></div>
+          </div>
+        </article>
+        <article class="product product-denim" data-product="acne-denim" data-category="acne" id="produkt-acne-denim" tabindex="-1">
+          <div class="product-photo">
+            <img src="assets/denim.webp" alt="Hellblaue Jeans mit weitem Bein" width="720" height="720" loading="lazy">
+            <span class="product-tape">Acne Studios</span>
+            <button class="product-detail-open" type="button" data-product-open="acne-denim" aria-label="Details zu Weite Jeans" aria-haspopup="dialog">Details <span aria-hidden="true">↗</span></button>
+          </div>
+          <div class="product-body">
+            <h3>Weite Jeans</h3>
+            <p>Helle Waschung und eine entspannte Passform.</p>
+            <div class="product-buy"><strong>219,00 €</strong><button type="button" data-add="acne-denim" aria-label="Weite Jeans in den Warenkorb legen"><span>In den Korb</span> <span aria-hidden="true">+</span></button></div>
+          </div>
+        </article>
+        <article class="product product-jacket" data-product="acne-jacket" data-category="acne" id="produkt-acne-jacket" tabindex="-1">
+          <div class="product-photo">
+            <img src="assets/jacket.webp" alt="Ausgewaschene graue Jeansjacke mit Brusttaschen" width="720" height="720" loading="lazy">
+            <span class="product-tape">Acne Studios</span>
+            <button class="product-detail-open" type="button" data-product-open="acne-jacket" aria-label="Details zu Verwaschene graue Jeansjacke" aria-haspopup="dialog">Details <span aria-hidden="true">↗</span></button>
+          </div>
+          <div class="product-body">
+            <h3>Verwaschene graue Jeansjacke</h3>
+            <p>Verwaschener grauer Denim mit sichtbaren Nähten.</p>
+            <div class="product-buy"><strong>299,00 €</strong><button type="button" data-add="acne-jacket" aria-label="Verwaschene graue Jeansjacke in den Warenkorb legen"><span>In den Korb</span> <span aria-hidden="true">+</span></button></div>
+          </div>
+        </article>
+        <article class="product product-blazer" data-product="jil-sander" data-category="jil-sander" id="produkt-jil-sander" tabindex="-1">
+          <div class="product-photo">
+            <img src="assets/blazer.webp" alt="Dunkler Wollblazer mit geradem Schnitt" width="720" height="720" loading="lazy">
+            <span class="product-tape">Jil Sander</span>
+            <button class="product-detail-open" type="button" data-product-open="jil-sander" aria-label="Details zu Wollblazer" aria-haspopup="dialog">Details <span aria-hidden="true">↗</span></button>
+          </div>
+          <div class="product-body">
+            <h3>Wollblazer</h3>
+            <p>Gerader Schnitt und eine klare Schulterlinie.</p>
+            <div class="product-buy"><strong>320,00 €</strong><button type="button" data-add="jil-sander" aria-label="Wollblazer in den Warenkorb legen"><span>In den Korb</span> <span aria-hidden="true">+</span></button></div>
+          </div>
+        </article>
+        <article class="product product-cargo" data-product="gmbh" data-category="gmbh" id="produkt-gmbh" tabindex="-1">
+          <div class="product-photo">
+            <img src="assets/cargo.webp" alt="Dunkle Cargo-Hose mit aufgesetzten Taschen" width="720" height="720" loading="lazy">
+            <span class="product-tape">GmbH</span>
+            <button class="product-detail-open" type="button" data-product-open="gmbh" aria-label="Details zu Cargo-Hose" aria-haspopup="dialog">Details <span aria-hidden="true">↗</span></button>
+          </div>
+          <div class="product-body">
+            <h3>Cargo-Hose</h3>
+            <p>Weites Bein und aufgesetzte Taschen.</p>
+            <div class="product-buy"><strong>249,00 €</strong><button type="button" data-add="gmbh" aria-label="Cargo-Hose in den Warenkorb legen"><span>In den Korb</span> <span aria-hidden="true">+</span></button></div>
+          </div>
+        </article>
+        <article class="product product-nylon" data-product="032c" data-category="032c" id="produkt-032c" tabindex="-1">
+          <div class="product-photo">
+            <img src="assets/nylon.webp" alt="Beige Nylonjacke mit weitem Schnitt" width="720" height="720" loading="lazy">
+            <span class="product-tape">032c</span>
+            <button class="product-detail-open" type="button" data-product-open="032c" aria-label="Details zu Beige Nylonjacke" aria-haspopup="dialog">Details <span aria-hidden="true">↗</span></button>
+          </div>
+          <div class="product-body">
+            <h3>Beige Nylonjacke</h3>
+            <p>Leichtes Nylon in einem warmen Sandton.</p>
+            <div class="product-buy"><strong>269,00 €</strong><button type="button" data-add="032c" aria-label="Beige Nylonjacke in den Warenkorb legen"><span>In den Korb</span> <span aria-hidden="true">+</span></button></div>
+          </div>
+        </article>
+        <article class="product product-hemd" data-product="akog" data-category="akog" id="produkt-akog" tabindex="-1">
+          <div class="product-photo">
+            <img src="assets/hemd.webp" alt="Hemd mit kastig geschnittener Silhouette" width="720" height="720" loading="lazy">
+            <span class="product-tape">A Kind of Guise</span>
+            <button class="product-detail-open" type="button" data-product-open="akog" aria-label="Details zu Boxy Hemd" aria-haspopup="dialog">Details <span aria-hidden="true">↗</span></button>
+          </div>
+          <div class="product-body">
+            <h3>Boxy Hemd</h3>
+            <p>Kastige Silhouette mit lockerem Fall.</p>
+            <div class="product-buy"><strong>159,00 €</strong><button type="button" data-add="akog" aria-label="Boxy Hemd in den Warenkorb legen"><span>In den Korb</span> <span aria-hidden="true">+</span></button></div>
+          </div>
+        </article>
+      </div>
+      <p class="catalog-note">Demo-Shop. Bilder und Preise dienen zur Illustration.</p>
+    </section>
+
+    <section class="details" id="delivery" aria-labelledby="details-heading">
+      <div class="wrap details-inner">
+        <div><h2 id="details-heading">VERSAND<br> &amp; BESTELLUNG.</h2></div>
+        <div class="faq">
+          <details open><summary>Woher kommen die Stücke?</summary><p>KRYVO ist als Online-Shop aus China konzipiert. Die Stücke des Drops stehen beispielhaft für Fundstücke von chinesischen Resale-Plattformen.</p></details>
+          <details><summary>Wann entstehen die Fotos?</summary><p>Die Fotos entstehen beim Zustandscheck im Lager in China. Sobald das Paket auf dem Weg nach Deutschland ist, folgt auf dieser Etappe kein weiterer Fototermin. <a href="#lagerfotos">Beispielfotos ansehen</a>.</p></details>
+          <details><summary>Wie melde ich einen Kaufwunsch?</summary><p>In der Detailansicht eines Stücks kannst du eine Anfrage vorbereiten und kopieren. Im dargestellten Ablauf klären wir den Kauf per Nachricht oder Anruf. Anschließend verschicken wir das Stück von Deutschland aus.</p></details>
+          <details><summary>Kann ich etwas kaufen?</summary><p>Du kannst den Warenkorb und den Checkout ausprobieren. Diese Demo nimmt keine Zahlungen an und verschickt keine Ware. Die Bilder und Preise sind Beispiele.</p></details>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <div class="footer-brand"><a class="brand" href="#top" aria-label="KRYVO, zur Startseite">KRY<span class="brand-v">V</span>O<span class="brand-dot">.</span></a><p>Designer-Vintage aus China · Shop-Konzept</p></div>
+      <div class="footer-links"><a href="#catalog">Shop</a><a href="#tracking">Sendung verfolgen</a><a href="#delivery">Versand &amp; Bestellung</a><a href="https://github.com/8bsite/streetwear-brand-website-template">Inspiriert von SCRAWL (8B)</a></div>
+    </div>
+  </footer>
+  <div class="kryvo-cart-notice" data-cart-notice role="status" aria-live="polite" aria-atomic="true"></div>
+
+<dialog class="kryvo-commerce" aria-labelledby="kryvo-commerce-heading" data-commerce>
+  <div class="kryvo-commerce__inner">
+    <header class="kryvo-commerce__header">
+      <h2 class="kryvo-commerce__heading" id="kryvo-commerce-heading" tabindex="-1">Warenkorb</h2>
+      <button class="kryvo-commerce__close" type="button" data-cart-close aria-label="Warenkorb schließen" autofocus>×</button>
+    </header>
+
+    <div class="kryvo-commerce__contents" data-cart-view>
+      <div class="kryvo-commerce__empty" data-cart-empty>
+        <span class="kryvo-commerce__empty-sticker" aria-hidden="true">:)</span>
+        <p>Dein Warenkorb ist leer.</p>
+        <button class="kryvo-commerce__button kryvo-commerce__button--secondary" type="button" data-cart-browse>Zum Sortiment</button>
+      </div>
+      <ul class="kryvo-commerce__items" aria-label="Artikel im Warenkorb" data-cart-items></ul>
+    </div>
+
+    <footer class="kryvo-commerce__footer" data-cart-footer hidden>
+      <div class="kryvo-commerce__totals">
+        <span>Warenwert</span>
+        <strong data-cart-total>0,00 €</strong>
+      </div>
+      <button class="kryvo-commerce__button" type="button" data-checkout-open>Weiter zur Kasse <span aria-hidden="true">↗</span></button>
+    </footer>
+
+    <form class="kryvo-commerce__checkout" data-checkout hidden>
+      <p class="kryvo-commerce__checkout-intro">Deine Demo-Bestellung wird in diesem Browser gespeichert. Es fallen keine Kosten an.</p>
+      <fieldset class="kryvo-commerce__delivery">
+        <legend>Versandart</legend>
+        <label><input type="radio" name="delivery" value="Standardversand" required checked> <span>Standardversand</span></label>
+        <label><input type="radio" name="delivery" value="Abholstation"> <span>Lieferung an eine Abholstation</span></label>
+      </fieldset>
+      <div class="kryvo-commerce__totals">
+        <span>Warenwert</span>
+        <strong data-checkout-total>0,00 €</strong>
+      </div>
+      <button class="kryvo-commerce__button" type="submit">Demo-Bestellung bestätigen <span aria-hidden="true">↗</span></button>
+      <button class="kryvo-commerce__link" type="button" data-checkout-back>Zurück zum Warenkorb</button>
+    </form>
+
+    <div class="kryvo-commerce__done" data-checkout-done hidden>
+      <span class="kryvo-commerce__empty-sticker" aria-hidden="true">✓</span>
+      <p data-checkout-summary></p>
+      <a class="kryvo-commerce__button kryvo-commerce__tracking" data-checkout-track hidden>
+        <span>Bestellung verfolgen <strong data-checkout-code></strong></span><span aria-hidden="true">↗</span>
+      </a>
+      <p data-checkout-tracking-error hidden>Der Browser konnte die Trackingnummer nicht speichern.</p>
+      <button class="kryvo-commerce__button" type="button" data-cart-close>Weiter stöbern <span aria-hidden="true">↗</span></button>
+    </div>
+  </div>
+</dialog>
+  <dialog class="product-detail" data-product-detail aria-labelledby="product-detail-title">
+  <div class="product-detail__layout">
+    <button type="button" class="product-detail__close" data-detail-close aria-label="Produktdetails schließen" autofocus>×</button>
+    <figure class="product-detail__media">
+      <img data-detail-image alt="" width="720" height="720">
+      <figcaption data-detail-brand></figcaption>
+    </figure>
+    <div class="product-detail__content">
+      <h2 id="product-detail-title" data-detail-title></h2>
+      <p class="product-detail__description" data-detail-description></p>
+
+      <dl class="product-detail__facts">
+        <div><dt>Passform</dt><dd data-detail-fit></dd></div>
+        <div><dt>Zustand (Demo)</dt><dd data-detail-condition></dd></div>
+      </dl>
+
+      <a class="product-detail__pair" data-detail-pair href="#catalog"><span data-detail-look></span><span data-detail-pair-name></span><span aria-hidden="true">↗</span></a>
+
+      <div class="product-detail__purchase">
+        <strong data-detail-price></strong>
+        <button class="product-detail__add" type="button" data-detail-add>In den Warenkorb <span aria-hidden="true">+</span></button>
+      </div>
+
+      <details class="product-detail__inquiry" data-product-inquiry>
+        <summary>Versandfrage vorbereiten</summary>
+        <textarea aria-label="Anfrageentwurf" data-detail-draft rows="4" spellcheck="true"></textarea>
+        <button class="product-detail__copy" type="button" data-detail-copy>Entwurf kopieren</button>
+        <p class="product-detail__status" role="status" data-detail-status></p>
+      </details>
+    </div>
+  </div>
+</dialog>
+<dialog class="ks-builder" data-look-builder aria-labelledby="ks-builder-title">
+  <header class="ks-builder__head">
+    <div>
+      <h2 id="ks-builder-title" tabindex="-1">Look zusammenstellen</h2>
+      <p data-builder-model></p>
+    </div>
+    <button class="ks-builder__close" type="button" data-builder-close aria-label="Look-Editor schließen">×</button>
+  </header>
+
+  <div class="ks-builder__body">
+    <div class="ks-builder__preview">
+      <h3>Deine Auswahl</h3>
+      <ul class="ks-builder__pieces" data-builder-preview></ul>
+    </div>
+    <div class="ks-builder__controls">
+      <label>Oberteil <select data-builder-slot="top"></select></label>
+      <label>Hose <select data-builder-slot="bottom"></select></label>
+      <label>Jacke <select data-builder-slot="outer"></select></label>
+      <p class="ks-builder__hint" data-builder-hint hidden>Wähle mindestens zwei Teile für deinen Look.</p>
+
+      <div class="ks-builder__save">
+        <label>Name des Looks <input type="text" data-builder-name maxlength="60" placeholder="z. B. Freitag in Berlin"></label>
+        <button class="ks-builder__secondary" type="button" data-builder-save>Look speichern</button>
+      </div>
+    </div>
+
+    <details class="ks-builder__saved" data-builder-saved>
+      <summary>Gespeicherte Looks <span data-builder-count aria-hidden="true">0</span></summary>
+      <p class="ks-builder__empty" data-builder-empty>Noch keine Looks gespeichert.</p>
+      <ul class="ks-builder__saved-list" data-builder-list></ul>
+    </details>
+  </div>
+
+  <footer class="ks-builder__footer">
+    <div>
+      <span>Gesamt</span>
+      <strong data-builder-total aria-live="polite">0,00 €</strong>
+    </div>
+    <button class="ks-builder__add" type="button" data-builder-add>Look in den Warenkorb <span aria-hidden="true">↗</span></button>
+    <p class="ks-builder__status" role="status" aria-live="polite" data-builder-status></p>
+  </footer>
+</dialog>
+</body>
+</html>
+
