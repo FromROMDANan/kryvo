@@ -2,15 +2,16 @@
   const route = document.querySelector('.kr-journey');
   if (!route) return;
 
-  const stage = route.querySelector('.kr-journey__stage');
   const panels = [...route.querySelectorAll('.kr-journey__panel')];
   const links = [...route.querySelectorAll('[data-journey-step]')];
   const pageHeader = document.querySelector('.header, .site-header');
-  const motion = window.matchMedia('(min-width: 320px) and (min-height: 590px) and (prefers-reduced-motion: no-preference)');
+  const motion = window.matchMedia('(min-width: 320px) and (prefers-reduced-motion: no-preference)');
   const compact = window.matchMedia('(max-width: 47rem)');
   const stageAngles = panels.map((panel) => Number.parseFloat(panel.style.getPropertyValue('--chapter-tilt')));
   const lastStep = panels.length - 1;
   let headerHeight = 0;
+  let stageHeight = 0;
+  let compactLayout = false;
   let runway = 0;
   let frame = 0;
   let previousProgress = -1;
@@ -38,12 +39,18 @@
     previousProgress = progress;
 
     const position = progress * lastStep;
-    const currentStep = Math.round(position);
-    const cardPosition = compact.matches ? currentStep : position;
-    route.style.setProperty('--journey-shift', `${-100 * cardPosition}%`);
-    route.style.setProperty('--journey-progress', `${100 * progress}%`);
     route.style.setProperty('--journey-china', `${100 * clamp(position / 4)}%`);
     route.style.setProperty('--journey-germany', `${100 * clamp((position - 4) / (lastStep - 4))}%`);
+
+    // Give narrow screens a little room to reverse direction without changing cards.
+    const keepStep = compactLayout && previousStep >= 0 && Math.abs(position - previousStep) < .6;
+    const currentStep = keepStep ? previousStep : Math.round(position);
+    if (compactLayout && currentStep === previousStep) return;
+
+    const cardPosition = compactLayout ? currentStep : position;
+    const adjacentStep = previousStep >= 0 && Math.abs(currentStep - previousStep) === 1;
+    route.toggleAttribute('data-journey-sliding', compactLayout && adjacentStep);
+    route.style.setProperty('--journey-shift', `${-100 * cardPosition}%`);
     setCurrent(currentStep);
 
     panels.forEach((panel, index) => {
@@ -55,19 +62,36 @@
   }
 
   function schedule() {
-    if (!frame && motion.matches) frame = requestAnimationFrame(render);
+    if (!frame && route.hasAttribute('data-journey-motion')) frame = requestAnimationFrame(render);
   }
 
   function measure() {
-    headerHeight = pageHeader && getComputedStyle(pageHeader).position === 'sticky'
+    const isCompact = compact.matches;
+    const smallViewport = isCompact ? Number.parseFloat(getComputedStyle(route, '::before').height) : 0;
+    const viewport = smallViewport || window.innerHeight;
+    const nextTop = pageHeader && getComputedStyle(pageHeader).position === 'sticky'
       ? pageHeader.getBoundingClientRect().height
       : 0;
-    const available = window.innerHeight - headerHeight;
-    const canPin = motion.matches && available >= 510;
+    const available = viewport - nextTop;
+    const canPin = motion.matches && viewport >= 590 && available >= 510;
+    const stepDistance = isCompact ? Math.max(410, Math.min(560, available * .76))
+      : Math.max(255, Math.min(420, available * (window.innerWidth < 760 ? .43 : .52)));
+    const nextRunway = stepDistance * lastStep;
+    route.toggleAttribute('data-journey-short', isCompact && viewport <= 680);
+
+    if (isCompact === compactLayout && nextTop === headerHeight && available === stageHeight
+      && nextRunway === runway && canPin === route.hasAttribute('data-journey-motion')) {
+      schedule();
+      return;
+    }
+
+    compactLayout = isCompact;
+    headerHeight = nextTop;
+    stageHeight = available;
+    runway = nextRunway;
     route.toggleAttribute('data-journey-motion', canPin);
-    runway = Math.max(255, Math.min(420, available * (window.innerWidth < 760 ? .43 : .52))) * lastStep;
     route.style.setProperty('--journey-top', `${headerHeight}px`);
-    route.style.setProperty('--journey-pin', `${available}px`);
+    route.style.setProperty('--journey-pin', `${stageHeight}px`);
     route.style.setProperty('--journey-runway', `${runway}px`);
     previousProgress = -1;
     previousStep = -1;
@@ -80,7 +104,7 @@
     schedule();
   }
 
-  function goTo(index, behavior = 'smooth') {
+  function goTo(index, behavior = compactLayout ? 'instant' : 'smooth') {
     const sectionTop = window.scrollY + route.getBoundingClientRect().top - headerHeight;
     window.scrollTo({ top: sectionTop + runway * index / lastStep, behavior });
   }

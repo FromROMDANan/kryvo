@@ -9,15 +9,26 @@ if (stickerSection) {
   const clamp = value => Math.min(1, Math.max(0, value));
   let frame;
   let offsets = [];
+  let lastProgress;
+
+  function getProgress() {
+    if (pin.matches) {
+      const runway = stickerSection.offsetHeight - stage.offsetHeight;
+      if (runway > 0) {
+        const stickyTop = Number.parseFloat(getComputedStyle(stage).top) || 0;
+        return clamp((stickyTop - stickerSection.getBoundingClientRect().top) / runway);
+      }
+    }
+
+    const viewport = window.innerHeight;
+    return clamp((viewport * .94 - wall.getBoundingClientRect().top) / (viewport * .56));
+  }
 
   function drawWall() {
     frame = undefined;
-    const viewport = window.innerHeight;
-    const runway = stickerSection.offsetHeight - stage.offsetHeight;
-    const stickyTop = Number.parseFloat(getComputedStyle(stage).top) || 0;
-    const progress = pin.matches && runway > 0
-      ? clamp((stickyTop - stickerSection.getBoundingClientRect().top) / runway)
-      : clamp((viewport * .94 - wall.getBoundingClientRect().top) / (viewport * .56));
+    const progress = getProgress();
+    if (progress === lastProgress) return;
+    lastProgress = progress;
 
     stickers.forEach((sticker, index) => {
       const t = clamp((progress - index * .073) / .56);
@@ -35,6 +46,7 @@ if (stickerSection) {
   }
 
   function measureWall() {
+    lastProgress = undefined;
     if (!motion.matches) {
       if (frame !== undefined) cancelAnimationFrame(frame);
       frame = undefined;
