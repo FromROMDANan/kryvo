@@ -322,34 +322,11 @@
 .kr-journey[data-journey-motion] .kr-journey__media img { max-height: none; min-height: 0; }
 .kr-journey[data-journey-motion] .kr-journey__index { margin-bottom: .45rem; }
 
-.kr-journey__pager:not([hidden]) {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  align-items: center;
-  gap: .4rem;
+.kr-journey__swipe-hint {
   margin-block: .6rem .55rem;
-}
-
-.kr-journey__pager button {
-  min-height: 44px;
-  padding: .3rem .55rem;
-  border: 1px solid var(--journey-cream);
-  color: var(--journey-ink);
-  background: var(--journey-yellow);
   font-size: .76rem;
-  font-weight: 850;
-  white-space: nowrap;
+  text-align: center;
 }
-
-.kr-journey__pager button[aria-disabled='true'] {
-  color: var(--journey-cream);
-  background: transparent;
-  border-color: #f6f0e585;
-  cursor: default;
-}
-
-.kr-journey__pager button:focus-visible { outline-color: var(--journey-cream); }
-.kr-journey__swipe-hint { font-size: .76rem; text-align: center; }
 
 .kr-journey[data-journey-pager] .kr-journey__stage { padding-block: clamp(1.35rem, 4vw, 3rem); }
 

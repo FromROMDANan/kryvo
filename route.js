@@ -5,10 +5,8 @@
   const panels = [...route.querySelectorAll('.kr-journey__panel')];
   const links = [...route.querySelectorAll('[data-journey-step]')];
   const cardFrame = route.querySelector('.kr-journey__frame');
-  const controls = route.querySelector('[data-journey-controls]');
-  const back = controls.querySelector('[data-journey-direction="-1"]');
-  const next = controls.querySelector('[data-journey-direction="1"]');
-  const status = controls.querySelector('[data-journey-status]');
+  const hint = route.querySelector('[data-journey-hint]');
+  const status = hint.querySelector('[data-journey-status]');
   const pageHeader = document.querySelector('.header, .site-header');
   const motion = window.matchMedia('(min-height: 590px) and (prefers-reduced-motion: no-preference)');
   const compact = window.matchMedia('(max-width: 47rem), (pointer: coarse) and (max-height: 32rem)');
@@ -48,8 +46,6 @@
     route.toggleAttribute('data-journey-sliding', animate && adjacent);
     setPosition(step);
     setCurrent(step);
-    back.setAttribute('aria-disabled', String(step === 0));
-    next.setAttribute('aria-disabled', String(step === lastStep));
     status.textContent = `Etappe ${step + 1} von ${panels.length} · ${links[step].querySelector('strong').textContent}`;
   }
 
@@ -84,7 +80,7 @@
       const step = Math.max(0, previousStep);
       route.removeAttribute('data-journey-motion');
       route.setAttribute('data-journey-pager', '');
-      controls.hidden = false;
+      hint.hidden = false;
       previousStep = -1;
       showPage(step, false);
       return;
@@ -92,7 +88,7 @@
 
     route.removeAttribute('data-journey-pager');
     route.removeAttribute('data-journey-sliding');
-    controls.hidden = true;
+    hint.hidden = true;
     headerHeight = pageHeader && getComputedStyle(pageHeader).position === 'sticky'
       ? pageHeader.getBoundingClientRect().height
       : 0;
@@ -162,9 +158,6 @@
       goTo(destination);
     });
   });
-
-  back.addEventListener('click', () => showPage(previousStep - 1));
-  next.addEventListener('click', () => showPage(previousStep + 1));
 
   function clearGesture() { gesture = undefined; }
 
