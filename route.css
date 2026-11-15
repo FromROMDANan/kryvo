@@ -322,37 +322,60 @@
 .kr-journey[data-journey-motion] .kr-journey__media img { max-height: none; min-height: 0; }
 .kr-journey[data-journey-motion] .kr-journey__index { margin-bottom: .45rem; }
 
-@media (max-width: 47rem) {
-  /* Keep the route tied to the space available with the browser controls visible. */
-  .kr-journey::before {
-    content: '';
-    position: fixed;
-    inset: 0 auto auto 0;
-    width: 0;
-    height: 100vh;
-    height: 100svh;
-    visibility: hidden;
-    pointer-events: none;
-  }
+.kr-journey__pager:not([hidden]) {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: .4rem;
+  margin-block: .6rem .55rem;
+}
 
-  .kr-journey[data-journey-motion] .kr-journey__stage { padding-block: clamp(1rem, 3svh, 2.7rem); }
+.kr-journey__pager button {
+  min-height: 44px;
+  padding: .3rem .55rem;
+  border: 1px solid var(--journey-cream);
+  color: var(--journey-ink);
+  background: var(--journey-yellow);
+  font-size: .76rem;
+  font-weight: 850;
+  white-space: nowrap;
+}
 
-  .kr-journey[data-journey-motion][data-journey-sliding] :is(.kr-journey__track, .kr-journey__card) {
-    transition: transform 360ms cubic-bezier(.22, .61, .36, 1);
-  }
+.kr-journey__pager button[aria-disabled='true'] {
+  color: var(--journey-cream);
+  background: transparent;
+  border-color: #f6f0e585;
+  cursor: default;
+}
 
-  .kr-journey[data-journey-motion] .kr-journey__card {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: minmax(0, 1fr) auto;
-    padding: .58rem;
-  }
+.kr-journey__pager button:focus-visible { outline-color: var(--journey-cream); }
+.kr-journey__swipe-hint { font-size: .76rem; text-align: center; }
 
-  .kr-journey[data-journey-motion] .kr-journey__panel { padding-inline: calc(var(--journey-edge) + .23rem); }
-  .kr-journey[data-journey-motion] .kr-journey__copy { padding: .62rem .15rem .12rem; }
-  .kr-journey[data-journey-motion] .kr-journey__copy h3 { margin-bottom: .32rem; }
-  .kr-journey[data-journey-motion] .kr-journey__copy > p:not(.kr-journey__index) { max-width: 43ch; }
+.kr-journey[data-journey-pager] .kr-journey__stage { padding-block: clamp(1.35rem, 4vw, 3rem); }
 
-  .kr-journey[data-journey-motion][data-journey-short] .kr-journey__heading h2 { font-size: clamp(1.6rem, 6.1vw, 3.15rem); }
-  .kr-journey[data-journey-motion][data-journey-short] .kr-journey__heading { margin-bottom: .55rem; }
-  .kr-journey[data-journey-motion][data-journey-short] .kr-journey__copy > p:not(.kr-journey__index) { font-size: .79rem; }
+.kr-journey[data-journey-pager] .kr-journey__frame {
+  overflow: clip;
+  margin-inline: -.5rem;
+  touch-action: pan-y pinch-zoom;
+}
+
+.kr-journey[data-journey-pager] .kr-journey__track {
+  display: flex;
+  gap: 0;
+  transform: translate3d(var(--journey-shift, 0%), 0, 0);
+}
+
+.kr-journey[data-journey-pager][data-journey-sliding] .kr-journey__track {
+  transition: transform 360ms cubic-bezier(.22, .61, .36, 1);
+}
+
+.kr-journey[data-journey-pager] .kr-journey__panel { flex: 0 0 100%; padding: .2rem .5rem .5rem; }
+.kr-journey[data-journey-pager] .kr-journey__card { grid-template-rows: auto 1fr; padding: .6rem; }
+.kr-journey[data-journey-pager] .kr-journey__media { aspect-ratio: 4 / 3; max-height: 31rem; }
+.kr-journey[data-journey-pager] .kr-journey__media img { min-height: 0; max-height: none; }
+.kr-journey[data-journey-pager] .kr-journey__copy { align-self: start; padding: .65rem .2rem .3rem; }
+.kr-journey[data-journey-pager] .kr-journey__copy > p:not(.kr-journey__index) { max-width: 46ch; }
+
+@media (orientation: landscape) and (max-height: 32rem) {
+  .kr-journey[data-journey-pager] .kr-journey__media { max-height: 62svh; }
 }

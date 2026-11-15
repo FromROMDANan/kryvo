@@ -8,8 +8,8 @@
   <title>KRYVO — Designer-Vintage aus China</title>
   <link rel="icon" href="assets/favicon.png" type="image/png">
   <link rel="stylesheet" href="assets/fonts.css">
-  <link rel="stylesheet" href="site.css">
-  <link rel="stylesheet" href="route.css?v=2">
+  <link rel="stylesheet" href="site.css?v=2">
+  <link rel="stylesheet" href="route.css?v=3">
   <link rel="stylesheet" href="warehouse.css">
   <link rel="stylesheet" href="tracking.css">
   <link rel="stylesheet" href="styling.css">
@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="catalog.css">
   <link rel="stylesheet" href="product.css">
   <script defer src="shop.js"></script>
-  <script defer src="route.js?v=2"></script>
+  <script defer src="route.js?v=3"></script>
   <script defer src="warehouse.js"></script>
   <script defer src="tracking.js"></script>
   <script defer src="styling.js"></script>
@@ -97,8 +97,14 @@
         </ol>
       </div>
     </nav>
+    <div class="kr-journey__pager" data-journey-controls hidden>
+      <button type="button" aria-controls="journey-track" data-journey-direction="-1"><span aria-hidden="true">←</span> Zurück</button>
+      <span class="kr-journey__swipe-hint">Seitlich wischen</span>
+      <button type="button" aria-controls="journey-track" data-journey-direction="1">Weiter <span aria-hidden="true">→</span></button>
+      <span class="visually-hidden" role="status" data-journey-status></span>
+    </div>
     <div class="kr-journey__frame">
-      <ol class="kr-journey__track">
+      <ol id="journey-track" class="kr-journey__track">
         <li class="kr-journey__panel" id="route-wunsch" style="--chapter-paper:#ffe06b;--chapter-tilt:-7deg">
           <article class="kr-journey__card">
             <div class="kr-journey__media">

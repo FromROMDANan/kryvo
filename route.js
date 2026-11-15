@@ -4,20 +4,27 @@
 
   const panels = [...route.querySelectorAll('.kr-journey__panel')];
   const links = [...route.querySelectorAll('[data-journey-step]')];
+  const cardFrame = route.querySelector('.kr-journey__frame');
+  const controls = route.querySelector('[data-journey-controls]');
+  const back = controls.querySelector('[data-journey-direction="-1"]');
+  const next = controls.querySelector('[data-journey-direction="1"]');
+  const status = controls.querySelector('[data-journey-status]');
   const pageHeader = document.querySelector('.header, .site-header');
-  const motion = window.matchMedia('(min-width: 320px) and (prefers-reduced-motion: no-preference)');
-  const compact = window.matchMedia('(max-width: 47rem)');
+  const motion = window.matchMedia('(min-height: 590px) and (prefers-reduced-motion: no-preference)');
+  const compact = window.matchMedia('(max-width: 47rem), (pointer: coarse) and (max-height: 32rem)');
   const stageAngles = panels.map((panel) => Number.parseFloat(panel.style.getPropertyValue('--chapter-tilt')));
   const lastStep = panels.length - 1;
   let headerHeight = 0;
-  let stageHeight = 0;
-  let compactLayout = false;
   let runway = 0;
   let frame = 0;
   let previousProgress = -1;
   let previousStep = -1;
+  let gesture;
+  let suppressClick = false;
 
   const clamp = (value, max = 1) => Math.max(0, Math.min(value, max));
+  const isPager = () => route.hasAttribute('data-journey-pager');
+  const isEnhanced = () => isPager() || route.hasAttribute('data-journey-motion');
 
   function setCurrent(index) {
     if (index === previousStep) return;
@@ -27,6 +34,24 @@
       else link.removeAttribute('aria-current');
     });
     panels.forEach((panel, panelIndex) => panel.toggleAttribute('inert', panelIndex !== index));
+  }
+
+  function setPosition(position) {
+    route.style.setProperty('--journey-shift', `${-100 * position}%`);
+    route.style.setProperty('--journey-china', `${100 * clamp(position / 4)}%`);
+    route.style.setProperty('--journey-germany', `${100 * clamp((position - 4) / (lastStep - 4))}%`);
+  }
+
+  function showPage(index, animate = true) {
+    const step = clamp(index, lastStep);
+    if (previousStep === step) return;
+    const adjacent = previousStep >= 0 && Math.abs(step - previousStep) === 1;
+    route.toggleAttribute('data-journey-sliding', animate && adjacent);
+    setPosition(step);
+    setCurrent(step);
+    back.setAttribute('aria-disabled', String(step === 0));
+    next.setAttribute('aria-disabled', String(step === lastStep));
+    status.textContent = `Etappe ${step + 1} von ${panels.length} · ${links[step].querySelector('strong').textContent}`;
   }
 
   function render() {
@@ -39,22 +64,11 @@
     previousProgress = progress;
 
     const position = progress * lastStep;
-    route.style.setProperty('--journey-china', `${100 * clamp(position / 4)}%`);
-    route.style.setProperty('--journey-germany', `${100 * clamp((position - 4) / (lastStep - 4))}%`);
-
-    // Give narrow screens a little room to reverse direction without changing cards.
-    const keepStep = compactLayout && previousStep >= 0 && Math.abs(position - previousStep) < .6;
-    const currentStep = keepStep ? previousStep : Math.round(position);
-    if (compactLayout && currentStep === previousStep) return;
-
-    const cardPosition = compactLayout ? currentStep : position;
-    const adjacentStep = previousStep >= 0 && Math.abs(currentStep - previousStep) === 1;
-    route.toggleAttribute('data-journey-sliding', compactLayout && adjacentStep);
-    route.style.setProperty('--journey-shift', `${-100 * cardPosition}%`);
-    setCurrent(currentStep);
+    setPosition(position);
+    setCurrent(Math.round(position));
 
     panels.forEach((panel, index) => {
-      const separation = clamp(Math.abs(cardPosition - index), 1);
+      const separation = clamp(Math.abs(position - index), 1);
       panel.style.setProperty('--chapter-angle', `${stageAngles[index] * separation}deg`);
       panel.style.setProperty('--chapter-scale', 1 - .09 * separation);
       panel.style.setProperty('--chapter-lift', `${14 * separation}px`);
@@ -66,32 +80,29 @@
   }
 
   function measure() {
-    const isCompact = compact.matches;
-    const smallViewport = isCompact ? Number.parseFloat(getComputedStyle(route, '::before').height) : 0;
-    const viewport = smallViewport || window.innerHeight;
-    const nextTop = pageHeader && getComputedStyle(pageHeader).position === 'sticky'
-      ? pageHeader.getBoundingClientRect().height
-      : 0;
-    const available = viewport - nextTop;
-    const canPin = motion.matches && viewport >= 590 && available >= 510;
-    const stepDistance = isCompact ? Math.max(410, Math.min(560, available * .76))
-      : Math.max(255, Math.min(420, available * (window.innerWidth < 760 ? .43 : .52)));
-    const nextRunway = stepDistance * lastStep;
-    route.toggleAttribute('data-journey-short', isCompact && viewport <= 680);
-
-    if (isCompact === compactLayout && nextTop === headerHeight && available === stageHeight
-      && nextRunway === runway && canPin === route.hasAttribute('data-journey-motion')) {
-      schedule();
+    if (compact.matches) {
+      if (isPager()) return;
+      const step = Math.max(0, previousStep);
+      route.removeAttribute('data-journey-motion');
+      route.setAttribute('data-journey-pager', '');
+      controls.hidden = false;
+      previousStep = -1;
+      showPage(step, false);
       return;
     }
 
-    compactLayout = isCompact;
-    headerHeight = nextTop;
-    stageHeight = available;
-    runway = nextRunway;
+    route.removeAttribute('data-journey-pager');
+    route.removeAttribute('data-journey-sliding');
+    controls.hidden = true;
+    headerHeight = pageHeader && getComputedStyle(pageHeader).position === 'sticky'
+      ? pageHeader.getBoundingClientRect().height
+      : 0;
+    const available = window.innerHeight - headerHeight;
+    const canPin = motion.matches && available >= 510;
+    runway = Math.max(255, Math.min(420, available * (window.innerWidth < 760 ? .43 : .52))) * lastStep;
     route.toggleAttribute('data-journey-motion', canPin);
     route.style.setProperty('--journey-top', `${headerHeight}px`);
-    route.style.setProperty('--journey-pin', `${stageHeight}px`);
+    route.style.setProperty('--journey-pin', `${available}px`);
     route.style.setProperty('--journey-runway', `${runway}px`);
     previousProgress = -1;
     previousStep = -1;
@@ -104,9 +115,14 @@
     schedule();
   }
 
-  function goTo(index, behavior = compactLayout ? 'instant' : 'smooth') {
+  function goTo(index, { reveal = false, animate = true } = {}) {
+    if (isPager()) {
+      showPage(index, animate && !reveal);
+      if (reveal) route.scrollIntoView({ behavior: 'instant', block: 'start' });
+      return;
+    }
     const sectionTop = window.scrollY + route.getBoundingClientRect().top - headerHeight;
-    window.scrollTo({ top: sectionTop + runway * index / lastStep, behavior });
+    window.scrollTo({ top: sectionTop + runway * index / lastStep, behavior: animate ? 'smooth' : 'instant' });
   }
 
   function matchingStep(hash) {
@@ -114,25 +130,26 @@
   }
 
   function followHash() {
-    if (!route.hasAttribute('data-journey-motion')) return;
+    if (!isEnhanced()) return;
     const index = matchingStep(window.location.hash);
-    if (index >= 0) requestAnimationFrame(() => goTo(index, 'instant'));
+    if (index >= 0) requestAnimationFrame(() => goTo(index, { reveal: true, animate: false }));
   }
 
   document.addEventListener('click', (event) => {
-    if (!route.hasAttribute('data-journey-motion') || event.defaultPrevented || event.button || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    if (!isEnhanced() || event.defaultPrevented || event.button || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
     const link = event.target.closest('a[href^="#route-"]');
     if (!link) return;
     const index = matchingStep(link.hash);
     if (index < 0) return;
     event.preventDefault();
-    if (!link.hasAttribute('data-journey-step') && window.location.hash !== link.hash) history.pushState(null, '', link.hash);
-    goTo(index);
+    const reveal = !link.hasAttribute('data-journey-step');
+    if (reveal && window.location.hash !== link.hash) history.pushState(null, '', link.hash);
+    goTo(index, { reveal });
   });
 
   links.forEach((link, index) => {
     link.addEventListener('keydown', (event) => {
-      if (!route.hasAttribute('data-journey-motion')) return;
+      if (!isEnhanced()) return;
       const directions = { ArrowLeft: index - 1, ArrowRight: index + 1, Home: 0, End: lastStep };
       const target = directions[event.key];
       if (target === undefined) return;
@@ -143,13 +160,43 @@
     });
   });
 
+  back.addEventListener('click', () => showPage(previousStep - 1));
+  next.addEventListener('click', () => showPage(previousStep + 1));
+
+  cardFrame.addEventListener('pointerdown', (event) => {
+    suppressClick = false;
+    gesture = isPager() && event.isPrimary && event.pointerType !== 'mouse'
+      ? { id: event.pointerId, x: event.clientX, y: event.clientY }
+      : undefined;
+  });
+
+  cardFrame.addEventListener('pointercancel', () => { gesture = undefined; });
+  cardFrame.addEventListener('pointerup', (event) => {
+    if (!gesture || gesture.id !== event.pointerId || !isPager()) return;
+    const x = event.clientX - gesture.x;
+    const y = event.clientY - gesture.y;
+    gesture = undefined;
+    if (Math.abs(x) < 44 || Math.abs(x) < Math.abs(y) * 1.25) return;
+    suppressClick = true;
+    showPage(previousStep - Math.sign(x));
+  });
+
+  cardFrame.addEventListener('click', (event) => {
+    if (!suppressClick || event.detail === 0) return;
+    suppressClick = false;
+    event.preventDefault();
+    event.stopPropagation();
+  }, true);
+
   window.addEventListener('scroll', schedule, { passive: true });
   window.addEventListener('resize', measure, { passive: true });
   window.addEventListener('hashchange', followHash);
+  compact.addEventListener('change', measure);
   motion.addEventListener('change', measure);
   document.fonts?.ready.then(() => {
     measure();
     followHash();
   });
   measure();
+  followHash();
 })();
