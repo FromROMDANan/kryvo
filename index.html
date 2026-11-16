@@ -9,7 +9,7 @@
   <link rel="icon" href="assets/favicon.png" type="image/png">
   <link rel="stylesheet" href="assets/fonts.css">
   <link rel="stylesheet" href="site.css?v=2">
-  <link rel="stylesheet" href="route.css?v=5">
+  <link rel="stylesheet" href="route.css?v=6">
   <link rel="stylesheet" href="warehouse.css">
   <link rel="stylesheet" href="tracking.css">
   <link rel="stylesheet" href="styling.css">
@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="catalog.css">
   <link rel="stylesheet" href="product.css">
   <script defer src="shop.js"></script>
-  <script defer src="route.js?v=5"></script>
+  <script defer src="route.js?v=6"></script>
   <script defer src="warehouse.js"></script>
   <script defer src="tracking.js"></script>
   <script defer src="styling.js"></script>
@@ -97,11 +97,8 @@
         </ol>
       </div>
     </nav>
-    <p class="kr-journey__swipe-hint" data-journey-hint hidden>
-      Auf dem Foto nach oben wischen
-      <span class="visually-hidden" role="status" data-journey-status></span>
-    </p>
     <div class="kr-journey__frame">
+      <svg class="kr-journey__path" aria-hidden="true" focusable="false"><g></g></svg>
       <ol id="journey-track" class="kr-journey__track">
         <li class="kr-journey__panel" id="route-wunsch" style="--chapter-paper:#ffe06b;--chapter-tilt:-7deg">
           <article class="kr-journey__card">
@@ -110,7 +107,6 @@
               <span class="kr-journey__tape" aria-hidden="true">DEIN WUNSCH</span>
             </div>
             <div class="kr-journey__copy">
-              <p class="kr-journey__index" aria-hidden="true">01 / 08</p>
               <h3>Wunsch schicken</h3>
               <p>Du sagst uns, welches Vintage-Stück du suchst. Marke, Modell, Größe oder ein Foto helfen uns, deinen Wunsch einzugrenzen.</p>
             </div>
@@ -123,7 +119,6 @@
               <span class="kr-journey__tape" aria-hidden="true">BESTELLT IN CHINA</span>
             </div>
             <div class="kr-journey__copy">
-              <p class="kr-journey__index" aria-hidden="true">02 / 08</p>
               <h3>Wir bestellen in China</h3>
               <p>Wenn wir ein passendes Stück finden, bestellen wir es beim Anbieter vor Ort. Der Anbieter schickt es zuerst ins Lager in China.</p>
             </div>
@@ -136,7 +131,6 @@
               <span class="kr-journey__tape" aria-hidden="true">LAGER IN CHINA</span>
             </div>
             <div class="kr-journey__copy">
-              <p class="kr-journey__index" aria-hidden="true">03 / 08</p>
               <h3>Ankunft im Lager in China</h3>
               <p>Das Team im Lager öffnet das Paket, ordnet das Kleidungsstück deinem Wunsch zu und bereitet es für die Fotos vor.</p>
             </div>
@@ -149,7 +143,6 @@
               <span class="kr-journey__tape" aria-hidden="true">FOTOS IM LAGER</span>
             </div>
             <div class="kr-journey__copy">
-              <p class="kr-journey__index" aria-hidden="true">04 / 08</p>
               <h3>Fotos im Lager</h3>
               <p>Das Lagerteam fotografiert Etikett, Nähte und sichtbare Gebrauchsspuren. So kannst du dir den Zustand in Ruhe ansehen.</p>
               <a class="kr-journey__photos-link" href="#lagerfotos">Lagerfotos ansehen <span aria-hidden="true">↘</span></a>
@@ -163,7 +156,6 @@
               <span class="kr-journey__tape" aria-hidden="true">CHINA → DEUTSCHLAND</span>
             </div>
             <div class="kr-journey__copy">
-              <p class="kr-journey__index" aria-hidden="true">05 / 08</p>
               <h3>Paket nach Deutschland</h3>
               <p>Nach den Fotos verpackt das Lagerteam das Stück für den Weitertransport. Der Versanddienst bringt das Paket nach Deutschland.</p>
             </div>
@@ -176,7 +168,6 @@
               <span class="kr-journey__tape" aria-hidden="true">IN DEUTSCHLAND</span>
             </div>
             <div class="kr-journey__copy">
-              <p class="kr-journey__index" aria-hidden="true">06 / 08</p>
               <h3>Bei uns in Deutschland</h3>
               <p>Das Paket kommt bei uns an. Wir legen das Kleidungsstück für die letzte Etappe zurück und besprechen mit dir, ob du es kaufen möchtest.</p>
             </div>
@@ -189,7 +180,6 @@
               <span class="kr-journey__tape" aria-hidden="true">NACHRICHT ODER ANRUF</span>
             </div>
             <div class="kr-journey__copy">
-              <p class="kr-journey__index" aria-hidden="true">07 / 08</p>
               <h3>Kaufwunsch bestätigen</h3>
               <p>Du bestätigst deinen Kaufwunsch per Nachricht oder Anruf. Dabei klären wir die Lieferadresse und die Angaben für den Versand.</p>
               <a class="kr-journey__photos-link" href="#catalog">Stück im Shop wählen <span aria-hidden="true">↘</span></a>
@@ -203,7 +193,6 @@
               <span class="kr-journey__tape" aria-hidden="true">BEI DIR</span>
             </div>
             <div class="kr-journey__copy">
-              <p class="kr-journey__index" aria-hidden="true">08 / 08</p>
               <h3>Wir schicken es dir</h3>
               <p>Nach deiner Bestätigung schicken wir dein Stück von Deutschland aus an deine Lieferadresse. Der Paketdienst bringt es bis zu dir.</p>
             </div>
@@ -211,6 +200,7 @@
         </li>
       </ol>
     </div>
+    <div class="kr-journey__readout" data-journey-readout></div>
   </div>
 </section>
 

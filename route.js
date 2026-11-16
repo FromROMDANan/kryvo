@@ -3,216 +3,260 @@
   if (!route) return;
 
   const panels = [...route.querySelectorAll('.kr-journey__panel')];
+  const panelIds = panels.map((panel) => panel.id);
   const links = [...route.querySelectorAll('[data-journey-step]')];
-  const cardFrame = route.querySelector('.kr-journey__frame');
-  const hint = route.querySelector('[data-journey-hint]');
-  const status = hint.querySelector('[data-journey-status]');
+  const frame = route.querySelector('.kr-journey__frame');
+  const readout = route.querySelector('[data-journey-readout]');
+  const pathGroup = route.querySelector('.kr-journey__path g');
   const pageHeader = document.querySelector('.header, .site-header');
-  const motion = window.matchMedia('(min-height: 590px) and (prefers-reduced-motion: no-preference)');
-  const compact = window.matchMedia('(max-width: 47rem), (pointer: coarse) and (max-height: 32rem)');
-  const stageAngles = panels.map((panel) => Number.parseFloat(panel.style.getPropertyValue('--chapter-tilt')));
+  const motion = window.matchMedia('(prefers-reduced-motion: no-preference)');
   const lastStep = panels.length - 1;
+  const handoff = 3;
+  const leadIn = .42;
+  const leadOut = .42;
+  const layoutColumns = [0, 1, 2, 3, 3, 2, 1, 0];
+  const layoutStagger = [-.32, .48, -.38, .4, -.34, .48, -.4, .32];
+
   let headerHeight = 0;
-  let runway = 0;
-  let frame = 0;
-  let previousProgress = -1;
+  let stepDistance = 0;
+  let camera;
+  let animationFrame = 0;
+  let previousDistance = -1;
   let previousStep = -1;
-  let gesture;
 
   const clamp = (value, max = 1) => Math.max(0, Math.min(value, max));
-  const isPager = () => route.hasAttribute('data-journey-pager');
-  const isEnhanced = () => isPager() || route.hasAttribute('data-journey-motion');
+  const isAnimated = () => route.hasAttribute('data-journey-motion');
+  const createPath = (className) => {
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('class', className);
+    return path;
+  };
+
+  const captions = panels.map((panel) => panel.querySelector('.kr-journey__copy').cloneNode(true));
+  captions.forEach((caption) => { caption.inert = true; });
+  readout?.append(...captions);
+
+  const anchors = panels.map(() => {
+    const anchor = document.createElement('span');
+    anchor.className = 'kr-journey__anchor';
+    anchor.setAttribute('aria-hidden', 'true');
+    return anchor;
+  });
+  route.prepend(...anchors);
+
+  const routeLine = createPath('kr-journey__line');
+  const arrows = panels.slice(1).map(() => {
+    const arrow = createPath('kr-journey__path-arrow');
+    arrow.setAttribute('d', 'M -8 -6 L 2 0 L -8 6 L -4 0 Z');
+    return arrow;
+  });
+  pathGroup?.append(routeLine, ...arrows);
+
+  function pointOn(segment, t) {
+    const q = 1 - t;
+    const weights = [q ** 3, 3 * q * q * t, 3 * q * t * t, t ** 3];
+    return {
+      x: segment.reduce((x, point, index) => x + point.x * weights[index], 0),
+      y: segment.reduce((y, point, index) => y + point.y * weights[index], 0),
+    };
+  }
+
+  function setCameraGeometry(width, height) {
+    const photoWidth = Math.min(550, width * (width < 760 ? .79 : .46), height * 1.6);
+    const photoHeight = Math.min(420, height * .82, photoWidth * .76);
+    const gap = Math.max(26, Math.min(76, width * .065));
+    const stride = photoWidth + gap;
+    const stagger = Math.min(58, height * .13);
+    const secondRow = Math.max(photoHeight + 2 * gap, height * .83);
+
+    const points = panels.map((panel, index) => {
+      const x = width / 2 + layoutColumns[index] * stride;
+      const y = height / 2 + layoutStagger[index] * stagger + (index > handoff ? secondRow : 0);
+      panel.style.setProperty('--station-x', `${x}px`);
+      panel.style.setProperty('--station-y', `${y}px`);
+      return { x, y };
+    });
+    route.style.setProperty('--journey-photo-width', `${photoWidth}px`);
+    route.style.setProperty('--journey-photo-height', `${photoHeight}px`);
+
+    const segments = points.slice(1).map((end, index) => {
+      const start = points[index];
+      const dx = end.x - start.x;
+      if (index === handoff) {
+        const bend = Math.min(photoWidth * .24, 104);
+        const dy = end.y - start.y;
+        return [start, { x: start.x + bend, y: start.y + dy * .24 },
+          { x: end.x + bend, y: end.y - dy * .24 }, end];
+      }
+      return [start, { x: start.x + dx * .4, y: start.y },
+        { x: end.x - dx * .4, y: end.y }, end];
+    });
+
+    const coordinates = (point) => `${point.x.toFixed(2)} ${point.y.toFixed(2)}`;
+    const curves = segments.map((segment) => `C ${segment.slice(1).map(coordinates).join(' ')}`);
+    routeLine.setAttribute('d', `M ${coordinates(points[0])} ${curves.join(' ')}`);
+    segments.forEach((segment, index) => {
+      const center = pointOn(segment, .5);
+      const forward = pointOn(segment, .51);
+      const angle = Math.atan2(forward.y - center.y, forward.x - center.x) * 180 / Math.PI;
+      arrows[index].setAttribute('transform', `translate(${coordinates(center)}) rotate(${angle})`);
+    });
+
+    camera = { width, height, segments };
+  }
 
   function setCurrent(index) {
     if (index === previousStep) return;
+    const captionHadFocus = previousStep >= 0 && captions[previousStep].contains(document.activeElement);
     previousStep = index;
-    links.forEach((link, linkIndex) => {
-      if (linkIndex === index) link.setAttribute('aria-current', 'step');
+    links.forEach((link, i) => {
+      if (i === index) link.setAttribute('aria-current', 'step');
       else link.removeAttribute('aria-current');
+      link.toggleAttribute('data-journey-passed', i < index);
     });
-    panels.forEach((panel, panelIndex) => panel.toggleAttribute('inert', panelIndex !== index));
-  }
-
-  function setPosition(position) {
-    route.style.setProperty('--journey-shift', `${-100 * position}%`);
-    route.style.setProperty('--journey-china', `${100 * clamp(position / 4)}%`);
-    route.style.setProperty('--journey-germany', `${100 * clamp((position - 4) / (lastStep - 4))}%`);
-  }
-
-  function showPage(index, animate = true) {
-    const step = clamp(index, lastStep);
-    if (previousStep === step) return;
-    const adjacent = previousStep >= 0 && Math.abs(step - previousStep) === 1;
-    route.toggleAttribute('data-journey-sliding', animate && adjacent);
-    setPosition(step);
-    setCurrent(step);
-    status.textContent = `Etappe ${step + 1} von ${panels.length} · ${links[step].querySelector('strong').textContent}`;
+    panels.forEach((panel, i) => { panel.inert = i !== index; });
+    captions.forEach((caption, i) => {
+      caption.toggleAttribute('data-journey-active', i === index);
+      caption.inert = i !== index;
+    });
+    if (captionHadFocus) links[index].focus({ preventScroll: true });
   }
 
   function render() {
-    frame = 0;
-    if (!route.hasAttribute('data-journey-motion')) return;
+    animationFrame = 0;
+    if (!isAnimated() || !camera) return;
+    const distance = clamp(headerHeight - route.getBoundingClientRect().top, stepDistance * (leadIn + lastStep));
+    if (distance === previousDistance) return;
+    previousDistance = distance;
 
-    const distance = headerHeight - route.getBoundingClientRect().top;
-    const progress = clamp(distance / runway);
-    if (progress === previousProgress) return;
-    previousProgress = progress;
-
-    const position = progress * lastStep;
-    setPosition(position);
-    setCurrent(Math.round(position));
-
-    panels.forEach((panel, index) => {
-      const separation = clamp(Math.abs(position - index), 1);
-      panel.style.setProperty('--chapter-angle', `${stageAngles[index] * separation}deg`);
-      panel.style.setProperty('--chapter-scale', 1 - .09 * separation);
-      panel.style.setProperty('--chapter-lift', `${14 * separation}px`);
-    });
+    const travel = distance / stepDistance;
+    const position = clamp(travel - leadIn, lastStep);
+    const segment = Math.min(Math.floor(position), lastStep - 1);
+    const current = pointOn(camera.segments[segment], position - segment);
+    const entrance = (1 - clamp(travel / leadIn)) ** 1.6;
+    route.style.setProperty('--journey-x', `${camera.width / 2 - current.x + camera.width * .29 * entrance}px`);
+    route.style.setProperty('--journey-y', `${camera.height / 2 - current.y}px`);
+    route.style.setProperty('--journey-china', `${100 * clamp(position / handoff)}%`);
+    route.style.setProperty('--journey-handoff', `${100 * clamp(position - handoff)}%`);
+    route.style.setProperty('--journey-germany', `${100 * clamp((position - handoff - 1) / (lastStep - handoff - 1))}%`);
+    if (previousStep < 0 || Math.abs(position - previousStep) >= .56) {
+      setCurrent(Math.round(position));
+    }
   }
 
   function schedule() {
-    if (!frame && route.hasAttribute('data-journey-motion')) frame = requestAnimationFrame(render);
+    if (!animationFrame && isAnimated()) animationFrame = requestAnimationFrame(render);
+  }
+
+  function positionAnchors() {
+    // Keep fragment links on the scroll axis instead of the transformed artwork.
+    const scrollPadding = Number.parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+    const offset = scrollPadding - headerHeight - route.clientTop;
+    anchors.forEach((anchor, index) => {
+      panels[index].removeAttribute('id');
+      anchor.id = panelIds[index];
+      anchor.style.top = `${offset + (leadIn + index) * stepDistance}px`;
+    });
   }
 
   function measure() {
-    if (compact.matches) {
-      if (isPager()) return;
-      const step = Math.max(0, previousStep);
-      route.removeAttribute('data-journey-motion');
-      route.setAttribute('data-journey-pager', '');
-      hint.hidden = false;
-      previousStep = -1;
-      showPage(step, false);
-      return;
-    }
-
-    route.removeAttribute('data-journey-pager');
-    route.removeAttribute('data-journey-sliding');
-    hint.hidden = true;
+    const stableHeight = Number.parseFloat(getComputedStyle(route, '::before').height) || window.innerHeight;
     headerHeight = pageHeader && getComputedStyle(pageHeader).position === 'sticky'
       ? pageHeader.getBoundingClientRect().height
       : 0;
-    const available = window.innerHeight - headerHeight;
-    const canPin = motion.matches && available >= 510;
-    runway = Math.max(255, Math.min(420, available * (window.innerWidth < 760 ? .43 : .52))) * lastStep;
-    route.toggleAttribute('data-journey-motion', canPin);
+    const available = stableHeight - headerHeight;
+    const canPin = motion.matches && available >= 505;
+
+    if (!canPin) {
+      if (isAnimated()) {
+        route.removeAttribute('data-journey-motion');
+        links.forEach((link) => {
+          link.removeAttribute('aria-current');
+          link.removeAttribute('data-journey-passed');
+        });
+        panels.forEach((panel) => { panel.inert = false; });
+        anchors.forEach((anchor, index) => {
+          anchor.removeAttribute('id');
+          panels[index].id = panelIds[index];
+        });
+        captions.forEach((caption) => { caption.inert = true; });
+        for (const property of ['--journey-china', '--journey-germany', '--journey-handoff']) {
+          route.style.removeProperty(property);
+        }
+      }
+      previousStep = -1;
+      camera = undefined;
+      return;
+    }
+
+    // Browser controls can resize the viewport without moving the reader to another stop.
+    stepDistance = Math.max(410, Math.min(540, window.innerWidth * .72));
     route.style.setProperty('--journey-top', `${headerHeight}px`);
     route.style.setProperty('--journey-pin', `${available}px`);
-    route.style.setProperty('--journey-runway', `${runway}px`);
-    previousProgress = -1;
-    previousStep = -1;
-    if (!canPin) {
-      panels.forEach((panel) => panel.removeAttribute('inert'));
-      links.forEach((link) => link.removeAttribute('aria-current'));
-      route.style.removeProperty('--journey-china');
-      route.style.removeProperty('--journey-germany');
-    }
+    route.style.setProperty('--journey-runway', `${stepDistance * (leadIn + lastStep + leadOut)}px`);
+    route.setAttribute('data-journey-motion', '');
+    positionAnchors();
+    const { clientWidth: width, clientHeight: height } = frame;
+    if (!camera || width !== camera.width || height !== camera.height) setCameraGeometry(width, height);
+    previousDistance = NaN;
     schedule();
   }
 
-  function goTo(index, { reveal = false, animate = true } = {}) {
-    if (isPager()) {
-      showPage(index, animate && !reveal);
-      if (reveal) route.scrollIntoView({ behavior: 'instant', block: 'start' });
-      return;
-    }
+  function goTo(index, animate = false) {
     const sectionTop = window.scrollY + route.getBoundingClientRect().top - headerHeight;
-    window.scrollTo({ top: sectionTop + runway * index / lastStep, behavior: animate ? 'smooth' : 'instant' });
+    window.scrollTo({
+      top: sectionTop + (leadIn + index) * stepDistance,
+      behavior: animate ? 'smooth' : 'instant',
+    });
   }
 
   function matchingStep(hash) {
-    return panels.findIndex((panel) => `#${panel.id}` === hash);
+    return panelIds.findIndex((id) => `#${id}` === hash);
   }
 
   function followHash() {
-    if (!isEnhanced()) return;
     const index = matchingStep(window.location.hash);
-    if (index >= 0) requestAnimationFrame(() => goTo(index, { reveal: true, animate: false }));
+    if (index >= 0 && isAnimated()) {
+      requestAnimationFrame(() => {
+        if (isAnimated()) goTo(index);
+      });
+    }
   }
 
   document.addEventListener('click', (event) => {
-    if (!isEnhanced() || event.defaultPrevented || event.button || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    if (!isAnimated() || event.defaultPrevented || event.button || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
     const link = event.target.closest('a[href^="#route-"]');
     if (!link) return;
     const index = matchingStep(link.hash);
     if (index < 0) return;
     event.preventDefault();
-    const reveal = !link.hasAttribute('data-journey-step');
-    if (reveal && window.location.hash !== link.hash) history.pushState(null, '', link.hash);
-    goTo(index, { reveal });
+    const fromScale = link.hasAttribute('data-journey-step');
+    if (!fromScale && window.location.hash !== link.hash) history.pushState(null, '', link.hash);
+    goTo(index, fromScale);
   });
 
   links.forEach((link, index) => {
     link.addEventListener('keydown', (event) => {
-      if (!isEnhanced()) return;
-      const directions = { ArrowLeft: index - 1, ArrowRight: index + 1, Home: 0, End: lastStep };
-      if (isPager()) {
-        directions.ArrowUp = index - 1;
-        directions.ArrowDown = index + 1;
-      }
+      const directions = {
+        ArrowLeft: index - 1,
+        ArrowRight: index + 1,
+        ArrowUp: index - 1,
+        ArrowDown: index + 1,
+        Home: 0,
+        End: lastStep,
+      };
       const target = directions[event.key];
       if (target === undefined) return;
       event.preventDefault();
       const destination = clamp(target, lastStep);
-      links[destination].focus({ preventScroll: true });
-      goTo(destination);
+      links[destination].focus({ preventScroll: isAnimated() });
+      if (isAnimated()) goTo(destination, true);
     });
   });
-
-  function clearGesture() { gesture = undefined; }
-
-  cardFrame.addEventListener('touchstart', (event) => {
-    clearGesture();
-    if (!isPager() || event.touches.length !== 1 || window.visualViewport?.scale > 1.02) return;
-    // The text and controls remain ordinary page-scrolling surfaces.
-    if (!event.target.closest?.('.kr-journey__media')) return;
-    const touch = event.touches[0];
-    gesture = { id: touch.identifier, x: touch.clientX, y: touch.clientY, step: previousStep, direction: 0 };
-  }, { passive: true });
-
-  cardFrame.addEventListener('touchmove', (event) => {
-    if (!gesture) return;
-    const touch = event.touches[0];
-    if (!isPager() || event.touches.length !== 1 || touch.identifier !== gesture.id
-      || previousStep !== gesture.step || !event.cancelable || window.visualViewport?.scale > 1.02) {
-      clearGesture();
-      return;
-    }
-
-    if (!gesture.direction) {
-      const dx = touch.clientX - gesture.x;
-      const dy = gesture.y - touch.clientY;
-      if (Math.max(Math.abs(dx), Math.abs(dy)) < 7) return;
-      const direction = Math.sign(dy);
-      const dest = gesture.step + direction;
-      if (Math.abs(dy) < Math.abs(dx) * 1.25 || dest < 0 || dest > lastStep) {
-        clearGesture();
-        return;
-      }
-      gesture.direction = direction;
-    }
-    event.preventDefault();
-  }, { passive: false });
-
-  cardFrame.addEventListener('touchend', (event) => {
-    const swipe = gesture;
-    clearGesture();
-    if (!swipe?.direction || event.touches.length || !isPager() || previousStep !== swipe.step) return;
-    const touch = Array.from(event.changedTouches).find((point) => point.identifier === swipe.id);
-    if (touch && (swipe.y - touch.clientY) * swipe.direction >= 44) {
-      showPage(swipe.step + swipe.direction);
-    }
-  }, { passive: true });
-
-  cardFrame.addEventListener('touchcancel', clearGesture, { passive: true });
-  document.addEventListener('touchstart', (event) => {
-    if (event.touches.length > 1) clearGesture();
-  }, { passive: true });
 
   window.addEventListener('scroll', schedule, { passive: true });
   window.addEventListener('resize', measure, { passive: true });
   window.addEventListener('hashchange', followHash);
-  compact.addEventListener('change', measure);
   motion.addEventListener('change', measure);
   document.fonts?.ready.then(() => {
     measure();
