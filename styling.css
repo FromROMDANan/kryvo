@@ -261,28 +261,66 @@
 }
 
 @media (max-width: 759px) {
+  .ks-styling::before {
+    content: '';
+    position: fixed;
+    inset: 0 auto auto 0;
+    width: 0;
+    height: 100vh;
+    height: 100svh;
+    visibility: hidden;
+    pointer-events: none;
+  }
   .ks-styling__intro { display: block; }
   .ks-styling__intro p { margin-top: 1rem; }
-  .ks-styling__looks { grid-template-columns: minmax(0, 1fr); row-gap: 2.6rem; }
-  .ks-look__photo { aspect-ratio: 2/3; max-height: 69svh; }
+  .ks-styling__looks { grid-template-columns: minmax(0, 1fr); row-gap: clamp(1.9rem, 6vw, 3.6rem); }
+  .ks-look {
+    border: 2px solid var(--ink);
+    background: var(--paper);
+    background: color-mix(in srgb, var(--ks-highlight) 13%, var(--paper));
+    box-shadow: .3rem .32rem var(--ink);
+  }
+  .ks-look__photo { max-height: 69svh; border: 0; box-shadow: none; }
   .ks-look__detail {
-    display: block; position: absolute; right: .5rem; bottom: .55rem;
+    display: block; position: absolute; right: .5rem; bottom: .95rem;
     width: 37%; aspect-ratio: 1; border: 2px solid var(--paper);
     box-shadow: 2px 3px var(--ink); rotate: 4deg;
   }
-  .ks-look__note { padding-top: 1.05rem; }
-  .ks-look__note h3 { font-size: clamp(2rem, 8vw, 3.1rem); }
-  @supports (animation-timeline: view()) {
-    @media (prefers-reduced-motion: no-preference) {
-      .ks-look__detail { animation: ks-inset-in linear both; animation-timeline: view(); animation-range: entry 0% cover 33%; }
-      .ks-look__marker { animation: ks-marker-in linear both; animation-timeline: view(); animation-range: entry 5% cover 42%; }
-    }
+  .ks-look__note {
+    padding: 1.38rem clamp(.85rem, 3.1vw, 1.45rem) .38rem;
+    border-top: 2px solid var(--ink);
+    box-shadow: inset 0 .28rem var(--ks-highlight);
   }
+  .ks-look__number {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    translate: 0 -63%;
+    margin: 0;
+  }
+  .ks-look__note h3 { font-size: clamp(2rem, 8vw, 3.1rem); }
+  .ks-look__note p { max-width: 39ch; }
 }
 
-@keyframes ks-inset-in {
-  from { opacity: 0; transform: translateY(1.5rem) rotate(-15deg) scale(.83); }
-  to { opacity: 1; transform: scale(1); }
+@media (max-width: 759px) and (prefers-reduced-motion: no-preference) {
+  .ks-styling[data-look-motion] .ks-look__fit {
+    transform-origin: center;
+    transform: translateY(calc((1 - var(--ks-photo-reveal, 1)) * .95rem))
+      scale(calc(1 + (1 - var(--ks-photo-reveal, 1)) * .09));
+  }
+  .ks-styling[data-look-motion] .ks-look__detail {
+    --ks-inset-progress: var(--ks-detail-reveal, 1);
+    transform: translateY(calc((1 - var(--ks-inset-progress)) * 1.7rem))
+      rotate(calc((1 - var(--ks-inset-progress)) * -11deg))
+      scale(calc(.84 + var(--ks-inset-progress) * .16));
+    opacity: calc(.35 + var(--ks-inset-progress) * .65);
+  }
+  .ks-styling[data-look-motion] .ks-look__marker {
+    clip-path: inset(-150% calc(100% - var(--ks-inset-progress) * 250%) -150% -150%);
+  }
+  .ks-styling[data-look-motion] .ks-look:has(.ks-look__outfit[open]) .ks-look__detail {
+    --ks-inset-progress: 1;
+  }
 }
 
 .ks-styling__entry { display: grid; gap: .7rem; justify-items: start; }

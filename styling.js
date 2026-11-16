@@ -6,13 +6,16 @@
   const stage = section.querySelector('[data-styling-stage]');
   const nav = section.querySelector('[data-styling-nav]');
   const looks = [...section.querySelectorAll('[data-styling-look]')];
+  const photos = looks.map(look => look.querySelector('.ks-look__photo'));
   const buttons = [...nav.querySelectorAll('[data-styling-jump]')];
   const motion = window.matchMedia('(min-width: 760px) and (min-height: 645px) and (prefers-reduced-motion: no-preference)');
+  const compactMotion = window.matchMedia('(max-width: 759px) and (prefers-reduced-motion: no-preference)');
   const header = document.querySelector('.header');
   const clamp = value => Math.max(0, Math.min(1, value));
   let queued = false;
   let previous = -1;
   let stickyTop = 0;
+  let compactHeight = 0;
 
   looks.forEach(look => {
     const hotspot = look.querySelector('[data-styling-hotspot]');
@@ -26,8 +29,27 @@
     outfit.addEventListener('toggle', () => hotspot.setAttribute('aria-expanded', String(outfit.open)));
   });
 
+  function updateCompact() {
+    const bounds = section.getBoundingClientRect();
+    if (bounds.top > compactHeight || bounds.bottom <= 0) return;
+
+    // Measure the stationary frames before updating any of their artwork.
+    const frames = photos.map(photo => photo.getBoundingClientRect());
+    frames.forEach(({ top, height }, index) => {
+      const photo = clamp((compactHeight * .95 - top) / (compactHeight * .78));
+      const detail = clamp((compactHeight * .94 - top - height * .56) / (compactHeight * .49));
+      const look = looks[index];
+      look.style.setProperty('--ks-photo-reveal', (1 - (1 - photo) ** 1.6).toFixed(3));
+      look.style.setProperty('--ks-detail-reveal', (1 - (1 - detail) ** 1.6).toFixed(3));
+    });
+  }
+
   function update() {
     queued = false;
+    if (compactMotion.matches) {
+      updateCompact();
+      return;
+    }
     if (!motion.matches) return;
 
     const distance = Math.max(1, runway.clientHeight - stage.offsetHeight);
@@ -53,7 +75,7 @@
   }
 
   function schedule() {
-    if (queued || !motion.matches) return;
+    if (queued || (!motion.matches && !compactMotion.matches)) return;
     queued = true;
     window.requestAnimationFrame(update);
   }
@@ -62,11 +84,15 @@
     stickyTop = (header?.getBoundingClientRect().height || 0) + 12;
     section.style.setProperty('--ks-sticky-top', `${stickyTop}px`);
     section.toggleAttribute('data-enhanced', motion.matches);
+    section.toggleAttribute('data-look-motion', compactMotion.matches);
     nav.hidden = !motion.matches;
     previous = -1;
 
-    if (motion.matches) schedule();
-    else looks.forEach(look => look.removeAttribute('aria-hidden'));
+    if (!motion.matches) looks.forEach(look => look.removeAttribute('aria-hidden'));
+    if (compactMotion.matches) {
+      compactHeight = Number.parseFloat(getComputedStyle(section, '::before').height) || window.innerHeight;
+    }
+    schedule();
   }
 
   nav.addEventListener('click', event => {
@@ -81,6 +107,7 @@
   window.addEventListener('scroll', schedule, { passive: true });
   window.addEventListener('resize', syncLayout);
   motion.addEventListener('change', syncLayout);
+  compactMotion.addEventListener('change', syncLayout);
   if (header && 'ResizeObserver' in window) new ResizeObserver(syncLayout).observe(header);
   syncLayout();
 })();

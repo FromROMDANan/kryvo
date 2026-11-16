@@ -5,15 +5,16 @@
   const panels = [...route.querySelectorAll('.kr-journey__panel')];
   const panelIds = panels.map((panel) => panel.id);
   const links = [...route.querySelectorAll('[data-journey-step]')];
+  const stage = route.querySelector('.kr-journey__stage');
   const frame = route.querySelector('.kr-journey__frame');
   const readout = route.querySelector('[data-journey-readout]');
   const pathGroup = route.querySelector('.kr-journey__path g');
   const pageHeader = document.querySelector('.header, .site-header');
   const motion = window.matchMedia('(prefers-reduced-motion: no-preference)');
+  const mobile = window.matchMedia('(max-width: 47rem)');
   const lastStep = panels.length - 1;
   const handoff = 3;
   const leadIn = .42;
-  const leadOut = .42;
   const layoutColumns = [0, 1, 2, 3, 3, 2, 1, 0];
   const layoutStagger = [-.32, .48, -.38, .4, -.34, .48, -.4, .32];
 
@@ -191,6 +192,7 @@
 
     // Browser controls can resize the viewport without moving the reader to another stop.
     stepDistance = Math.max(410, Math.min(540, window.innerWidth * .72));
+    const leadOut = mobile.matches ? .18 : .42;
     route.style.setProperty('--journey-top', `${headerHeight}px`);
     route.style.setProperty('--journey-pin', `${available}px`);
     route.style.setProperty('--journey-runway', `${stepDistance * (leadIn + lastStep + leadOut)}px`);
@@ -198,6 +200,11 @@
     positionAnchors();
     const { clientWidth: width, clientHeight: height } = frame;
     if (!camera || width !== camera.width || height !== camera.height) setCameraGeometry(width, height);
+    if (mobile.matches && readout) {
+      const padding = Number.parseFloat(getComputedStyle(stage).paddingBlockEnd);
+      const sceneHeight = Math.ceil(readout.offsetTop + readout.offsetHeight + padding + 1);
+      route.style.setProperty('--journey-pin', `${Math.min(available, sceneHeight)}px`);
+    }
     previousDistance = NaN;
     schedule();
   }

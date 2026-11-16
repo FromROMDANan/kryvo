@@ -358,6 +358,48 @@
 
 .kr-journey__readout [data-journey-active] { visibility: visible; }
 
+.kr-journey + .warehouse {
+  position: relative;
+  background-image:
+    linear-gradient(to bottom, transparent, var(--yellow) 5rem),
+    linear-gradient(#243dcf22 1px, transparent 1px),
+    linear-gradient(90deg, #243dcf22 1px, transparent 1px);
+  background-size: 100% 100%, 2.4rem 2.4rem, 2.4rem 2.4rem;
+}
+
+.kr-journey + .warehouse::before,
+.kr-journey + .warehouse::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+}
+
+.kr-journey + .warehouse::before {
+  top: -2.7rem;
+  left: 50%;
+  width: clamp(2.7rem, 8vw, 5.5rem);
+  height: 2.45rem;
+  border-top: 3px dotted var(--yellow);
+  border-left: 3px dotted var(--yellow);
+  border-top-left-radius: .9rem;
+}
+
+.kr-journey + .warehouse::after {
+  top: -.95rem;
+  left: 50%;
+  z-index: 1;
+  width: 2.55rem;
+  height: 1.85rem;
+  border: 2px solid var(--ink);
+  border-radius: .16rem;
+  background:
+    repeating-linear-gradient(90deg, var(--ink) 0 1px, transparent 1px 2px) 91% 79% / .52rem .33rem no-repeat,
+    linear-gradient(90deg, transparent 35%, var(--yellow) 35% 57%, transparent 57%),
+    var(--paper);
+  box-shadow: 2px 3px var(--ink);
+  transform: translateX(-50%) rotate(-8deg);
+}
+
 @media (max-width: 47rem) {
   .kr-journey__heading { align-items: center; gap: .55rem 1rem; }
   .kr-journey__heading h2 { font-size: clamp(1.9rem, 6vw, 3.9rem); }
@@ -391,6 +433,7 @@
 
   .kr-journey__handoff::before { border-bottom-style: dotted; }
   .kr-journey__handoff::after { width: var(--journey-handoff, 0%); }
+  .kr-journey + .warehouse .warehouse-inner { padding-block-start: clamp(2.15rem, 6vw, 3.2rem); }
 }
 
 @media (max-width: 35rem) {
