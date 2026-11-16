@@ -5,7 +5,6 @@
   const panels = [...route.querySelectorAll('.kr-journey__panel')];
   const panelIds = panels.map((panel) => panel.id);
   const links = [...route.querySelectorAll('[data-journey-step]')];
-  const stage = route.querySelector('.kr-journey__stage');
   const frame = route.querySelector('.kr-journey__frame');
   const readout = route.querySelector('[data-journey-readout]');
   const pathGroup = route.querySelector('.kr-journey__path g');
@@ -64,7 +63,9 @@
 
   function setCameraGeometry(width, height) {
     const photoWidth = Math.min(550, width * (width < 760 ? .79 : .46), height * 1.6);
-    const photoHeight = Math.min(420, height * .82, photoWidth * .76);
+    const photoHeight = mobile.matches
+      ? Math.min(height * .86, photoWidth * 1.4)
+      : Math.min(420, height * .82, photoWidth * .76);
     const gap = Math.max(26, Math.min(76, width * .065));
     const stride = photoWidth + gap;
     const stagger = Math.min(58, height * .13);
@@ -115,7 +116,10 @@
       else link.removeAttribute('aria-current');
       link.toggleAttribute('data-journey-passed', i < index);
     });
-    panels.forEach((panel, i) => { panel.inert = i !== index; });
+    panels.forEach((panel, i) => {
+      panel.inert = i !== index;
+      if (Math.abs(i - index) <= 1) panel.querySelector('img').loading = 'eager';
+    });
     captions.forEach((caption, i) => {
       caption.toggleAttribute('data-journey-active', i === index);
       caption.inert = i !== index;
@@ -200,11 +204,6 @@
     positionAnchors();
     const { clientWidth: width, clientHeight: height } = frame;
     if (!camera || width !== camera.width || height !== camera.height) setCameraGeometry(width, height);
-    if (mobile.matches && readout) {
-      const padding = Number.parseFloat(getComputedStyle(stage).paddingBlockEnd);
-      const sceneHeight = Math.ceil(readout.offsetTop + readout.offsetHeight + padding + 1);
-      route.style.setProperty('--journey-pin', `${Math.min(available, sceneHeight)}px`);
-    }
     previousDistance = NaN;
     schedule();
   }
