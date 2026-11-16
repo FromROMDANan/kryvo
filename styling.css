@@ -214,15 +214,24 @@
   color: #fff;
 }
 
-.ks-styling[data-enhanced] .ks-styling__runway { min-height: 185vh; }
+.ks-styling[data-enhanced] {
+  --ks-frame: min(calc(100% - var(--ks-gutter) * 2), 106.25rem);
+  --ks-scene-inset: clamp(1rem, 1.6vh, 1.7rem);
+  --ks-height: calc(100vh - var(--ks-sticky-top, 5.5rem) - var(--ks-scene-inset));
+  --ks-height: calc(100svh - var(--ks-sticky-top, 5.5rem) - var(--ks-scene-inset));
+  --ks-travel: clamp(39rem, 76vh, 64rem);
+  --ks-travel: clamp(39rem, 76svh, 64rem);
+  padding-block: clamp(3.4rem, 5vw, 5.5rem) clamp(2.75rem, 3vw, 4rem);
+}
+.ks-styling[data-enhanced] .ks-styling__intro { margin-bottom: clamp(1.55rem, 3vw, 3rem); }
+.ks-styling[data-enhanced] .ks-styling__runway { min-height: calc(var(--ks-height) + var(--ks-travel)); }
 .ks-styling[data-enhanced] .ks-styling__stage {
-  --ks-height: min(70vh, 44rem);
   position: sticky;
   top: var(--ks-sticky-top, 5.5rem);
   height: var(--ks-height);
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(13rem, 26%);
-  grid-template-rows: 1fr auto;
+  grid-template-rows: minmax(0, 1fr) auto;
   column-gap: clamp(1.4rem, 5vw, 5rem);
 }
 .ks-styling[data-enhanced] .ks-styling__looks,
@@ -241,8 +250,12 @@
   height: 100%;
   aspect-ratio: auto;
   display: grid;
-  grid-template-columns: minmax(0, 42%) minmax(0, 1fr);
+  grid-template-columns: minmax(0, min(56%, calc(var(--ks-height) * .68))) minmax(0, 1fr);
   grid-template-rows: minmax(0, 1fr);
+}
+.ks-styling[data-enhanced] .ks-look__photo .ks-look__fit {
+  object-fit: cover;
+  scale: var(--ks-model-zoom, 1.04);
 }
 .ks-styling[data-enhanced] .ks-look__detail { display: block; border-left: 2px solid var(--ink); }
 .ks-styling[data-enhanced] .ks-look__detail img { scale: var(--ks-zoom, 1.01); }

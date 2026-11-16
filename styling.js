@@ -7,6 +7,7 @@
   const nav = section.querySelector('[data-styling-nav]');
   const looks = [...section.querySelectorAll('[data-styling-look]')];
   const photos = looks.map(look => look.querySelector('.ks-look__photo'));
+  const pendingDesktopPhotos = [...section.querySelectorAll('.ks-look__photo img[loading="lazy"]')];
   const buttons = [...nav.querySelectorAll('[data-styling-jump]')];
   const motion = window.matchMedia('(min-width: 760px) and (min-height: 645px) and (prefers-reduced-motion: no-preference)');
   const compactMotion = window.matchMedia('(max-width: 759px) and (prefers-reduced-motion: no-preference)');
@@ -52,13 +53,22 @@
     }
     if (!motion.matches) return;
 
+    const { top } = runway.getBoundingClientRect();
+    if (pendingDesktopPhotos.length && top < window.innerHeight * 1.6) {
+      pendingDesktopPhotos.forEach(image => { image.loading = 'eager'; });
+      pendingDesktopPhotos.length = 0;
+    }
     const distance = Math.max(1, runway.clientHeight - stage.offsetHeight);
-    const progress = clamp((stickyTop - runway.getBoundingClientRect().top) / distance);
+    const progress = clamp((stickyTop - top) / distance);
+    const entry = clamp((window.innerHeight - top) / Math.max(1, window.innerHeight - stickyTop));
     const location = progress * looks.length;
     const index = Math.min(looks.length - 1, Math.floor(location));
     const part = location - index;
-    looks[index].style.setProperty('--ks-zoom', String(1.01 + clamp(part) * .24));
-    looks[index].style.setProperty('--ks-marker-delay', `${-clamp((part - .18) / .53) * .38}s`);
+    const motionProgress = index === 0 ? entry * .42 + part * .58 : part;
+    const look = looks[index];
+    look.style.setProperty('--ks-model-zoom', (1.04 - motionProgress * .04).toFixed(3));
+    look.style.setProperty('--ks-zoom', (1.01 + motionProgress * .24).toFixed(3));
+    look.style.setProperty('--ks-marker-delay', `${-clamp((motionProgress - .12) / .59) * .38}s`);
 
     if (index === previous) return;
     const focusedLook = document.activeElement?.closest('[data-styling-look]');
