@@ -14,6 +14,10 @@
   const lastStep = panels.length - 1;
   const handoff = 3;
   const leadIn = .42;
+  const leadOut = .64;
+  const stationSwitch = .56;
+  const catchStart = lastStep - 1 + stationSwitch;
+  const departure = .14;
   const layoutColumns = [0, 1, 2, 3, 3, 2, 1, 0];
   const layoutStagger = [-.32, .48, -.38, .4, -.34, .48, -.4, .32];
 
@@ -22,6 +26,7 @@
   let camera;
   let animationFrame = 0;
   let previousDistance = -1;
+  let previousCameraTravel = -1;
   let previousStep = -1;
 
   const clamp = (value, max = 1) => Math.max(0, Math.min(value, max));
@@ -127,14 +132,7 @@
     if (captionHadFocus) links[index].focus({ preventScroll: true });
   }
 
-  function render() {
-    animationFrame = 0;
-    if (!isAnimated() || !camera) return;
-    const distance = clamp(headerHeight - route.getBoundingClientRect().top, stepDistance * (leadIn + lastStep));
-    if (distance === previousDistance) return;
-    previousDistance = distance;
-
-    const travel = distance / stepDistance;
+  function moveCamera(travel) {
     const position = clamp(travel - leadIn, lastStep);
     const segment = Math.min(Math.floor(position), lastStep - 1);
     const current = pointOn(camera.segments[segment], position - segment);
@@ -144,9 +142,34 @@
     route.style.setProperty('--journey-china', `${100 * clamp(position / handoff)}%`);
     route.style.setProperty('--journey-handoff', `${100 * clamp(position - handoff)}%`);
     route.style.setProperty('--journey-germany', `${100 * clamp((position - handoff - 1) / (lastStep - handoff - 1))}%`);
-    if (previousStep < 0 || Math.abs(position - previousStep) >= .56) {
+    if (previousStep < 0 || Math.abs(position - previousStep) >= stationSwitch) {
       setCurrent(Math.round(position));
     }
+  }
+
+  function moveCourier(phase) {
+    const step = previousStep;
+    const last = step === lastStep;
+    const progress = last ? clamp((phase - catchStart) / (lastStep - catchStart))
+      : clamp(phase - step + .5);
+    const exit = last ? clamp((phase - lastStep - departure) / (leadOut - departure)) : 0;
+    route.dispatchEvent(new CustomEvent('kryvo:journey', { detail: { step, progress, exit } }));
+  }
+
+  function render() {
+    animationFrame = 0;
+    if (!isAnimated() || !camera) return;
+    const distance = clamp(headerHeight - route.getBoundingClientRect().top, stepDistance * (leadIn + lastStep + leadOut));
+    if (distance === previousDistance) return;
+    previousDistance = distance;
+
+    const travel = distance / stepDistance;
+    const cameraTravel = Math.min(travel, leadIn + lastStep);
+    if (cameraTravel !== previousCameraTravel) {
+      previousCameraTravel = cameraTravel;
+      moveCamera(cameraTravel);
+    }
+    moveCourier(travel - leadIn);
   }
 
   function schedule() {
@@ -171,6 +194,7 @@
       : 0;
     const available = stableHeight - headerHeight;
     const canPin = motion.matches && available >= 505;
+    route.toggleAttribute('data-journey-compact-figure', canPin && mobile.matches && available < 655);
 
     if (!canPin) {
       if (isAnimated()) {
@@ -196,7 +220,6 @@
 
     // Browser controls can resize the viewport without moving the reader to another stop.
     stepDistance = Math.max(410, Math.min(540, window.innerWidth * .72));
-    const leadOut = mobile.matches ? .18 : .42;
     route.style.setProperty('--journey-top', `${headerHeight}px`);
     route.style.setProperty('--journey-pin', `${available}px`);
     route.style.setProperty('--journey-runway', `${stepDistance * (leadIn + lastStep + leadOut)}px`);
@@ -205,6 +228,7 @@
     const { clientWidth: width, clientHeight: height } = frame;
     if (!camera || width !== camera.width || height !== camera.height) setCameraGeometry(width, height);
     previousDistance = NaN;
+    previousCameraTravel = NaN;
     schedule();
   }
 
